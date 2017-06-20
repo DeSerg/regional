@@ -12,7 +12,7 @@
 """
 
 import sys
-import locations.locations_mapper as lmapper
+import location_utils.locations_mapper as lmapper
 
 
 if __name__ == "__main__":

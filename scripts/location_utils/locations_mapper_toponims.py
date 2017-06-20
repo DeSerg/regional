@@ -6,7 +6,7 @@
 import pandas as pd
 import numpy as np
 import re
-import locations.locations_freq as lf
+import location_utils.locations_freq as lf
 import sys
 
 

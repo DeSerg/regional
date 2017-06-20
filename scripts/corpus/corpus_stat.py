@@ -6,7 +6,7 @@ from xml.etree import cElementTree as ET
 sys.path.insert(0, '..')
 
 import regional_dict.regional_collect as rc
-import locations.location_helper as lh
+import location_utils.location_helper as lh
 
 loc_files = [
     #('body.txt', 90)

@@ -4,7 +4,7 @@ import sys
 sys.path.insert(0, '..')
 
 import regional_dict.regional_collect as rc
-import locations.location_helper as lh
+import location_utils.location_helper as lh
 
 CorpusFiles = [
     ('/data/kaa/compose/m.lj.compact/groups.txt', 146425),
