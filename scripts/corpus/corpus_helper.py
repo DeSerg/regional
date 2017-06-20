@@ -14,11 +14,15 @@ CorpusFiles = [
 
 MinTextLen = 5000
 
+
 def extract_data_from_line(line, locations_map):
+
+    FailVal = ('', '', '')
+
     line_split = line.split(' ', 1)
     if len(line_split) != 2:
         print('Line without author?\n%s\n' % line)
-        return
+        return FailVal
     author_login, data = line_split[0], line_split[1]
 
     # Location
@@ -26,7 +30,7 @@ def extract_data_from_line(line, locations_map):
     locations = [lh.extract_location(loc) for loc in locations]
 
     if not locations:
-        return
+        return FailVal
     loc_set = set(locations)
     loc_count_arr = [(loc, locations.count(loc)) for loc in locations]
     loc_count_arr.sort(key=lambda x: x[1], reverse=True)
