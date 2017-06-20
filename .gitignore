@@ -8,3 +8,4 @@ data/standart_locations/corpus/*
 data/standart_locations/geonames_data/*
 classification_depr/*
 data/words_small.jsons
+__pycache__
