@@ -145,11 +145,14 @@ def country_stat(regional_dict_filename, out_filename):
             authors_num = country_stat[0]
             regional_words_num = country_stat[1]
             out_f.write('%s: %s, %f\n' % (country, authors_num, regional_words_num / authors_num))
-            
+
 
 def main(argv):
-    region_stat()
+    if len(argv) < 2:
+        print('Usage: script.py regional_dict.xlsx out_file')
+
+    country_stat(argv[0], argv[1])
 
 
 if __name__ == "__main__":
-    main(sys.argv)
+    main(sys.argv[1:])
