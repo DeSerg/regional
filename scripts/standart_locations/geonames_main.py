@@ -490,7 +490,7 @@ def prepare_combination(database, combination):
             entry = get_cyrillic_name(database, level, location[level][0]['geonameid'])
             toponims.append(LavelNames[level] + ': ' + entry)
 
-    result = ', '.join(toponims)
+    result = '; '.join(toponims)
     ready_combination = result
 
     result = '\n[[ ' + result + ' ]]'
@@ -523,7 +523,7 @@ def obtain_locations(database, input_file, output_file, output_bad_file):
                             ready, comm = prepare_combination(database, sorted_comb[0])
                             if sorted_comb[0][1] <= MinFine:
                                 #new_loc = LocationPrefix + ready[0] + LocationSuffix
-                                out.write(','.join(loc) + '\t\t' + ready + '\n')
+                                out.write(';'.join(loc) + '\t\t' + ready + '\n')
                             else:
                                 new_loc = LocationNA
                                 eprint('TOO HIGH FINE, SET TO NA')

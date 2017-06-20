@@ -132,7 +132,7 @@ def country_stat(location_map_filename, regional_dict_filename, out_filename):
                 if (lh.RegionKey in location) and (lh.CountryKey in location) and (len(texts) >= ch.MinTextLen):
                     country = location[lh.CountryKey]
                     without_regional_words, regional_texts = ch.count_regional_words(texts, regional_dict)
-                    if country in countries:
+                    if not country in countries:
                         countries[country] = [1, len(regional_texts)]
                     else:
                         countries[country][0] += 1
