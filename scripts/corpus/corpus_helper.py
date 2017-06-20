@@ -3,7 +3,7 @@ import sys
 
 sys.path.insert(0, '..')
 
-import regional_json.regional_collect as rc
+import regional_dict.regional_collect as rc
 import locations.location_helper as lh
 
 CorpusFiles = [
