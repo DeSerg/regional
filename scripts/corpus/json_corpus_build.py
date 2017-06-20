@@ -5,7 +5,7 @@ from xml.etree import cElementTree as ET
 
 sys.path.insert(0, '..')
 
-import regional_dict.regional_collect as rc
+import regional_dict.regional_dict_helper as rdh
 import location_utils.location_helper as lh
 import corpus.corpus_helper as ch
 
@@ -60,11 +60,12 @@ def parse_line(line_num, line, locations_map, regional_dict, corpus_for_classifi
 def main(argv):
     if len(argv) < 4:
         print('Usage: %s locations_map.json regional_dictionary.xlsx out_corpus_for_classification.json' % argv[0])
+        return
 
     with open(argv[1]) as locations_map_f:
         locations_map = json.load(locations_map_f)
 
-    rw = rc.RegionalWords(argv[2])
+    rw = rdh.RegionalWords(argv[2])
     regional_dict = rw.word_forms()
 
     out_data_filename = argv[3]
@@ -78,8 +79,6 @@ def main(argv):
 
     with open(out_data_filename, 'w') as out_data_f:
         json.dump(corpus_for_classification, out_data_f, ensure_ascii=False, indent=0)
-
-
 
 
 if __name__ == "__main__":
