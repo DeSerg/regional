@@ -13,7 +13,7 @@
 """
 
 import sys
-import regional_json.content_extractor as cextractor
+import regional_dict.content_extractor as cextractor
 
 
 if __name__ == "__main__":

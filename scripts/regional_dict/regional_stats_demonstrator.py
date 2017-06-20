@@ -13,8 +13,8 @@ from itertools import chain, filterfalse, zip_longest
 from collections import OrderedDict
 from bisect import bisect, bisect_left, insort
 
-import regional_json.regional_search as rs
-import regional_json.regional_json_statistics as rjs
+import regional_dict.regional_search as rs
+import regional_dict.regional_json_statistics as rjs
 from locations import save_to_file
 
 

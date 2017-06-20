@@ -25,10 +25,10 @@
 """
 
 import sys
-import regional_json.regional_collect as rcollect
-import regional_json.regional_json_statistics as rstat
-import regional_json.regional_json_prettifyer as rpretty
-##import regional_dict.regional_stats_demonstrator as rdemonstrate
+import regional_dict.regional_collect as rcollect
+import regional_dict.regional_json_statistics as rstat
+import regional_dict.regional_json_prettifyer as rpretty
+#import regional_dict.regional_stats_demonstrator as rdemonstrate
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
