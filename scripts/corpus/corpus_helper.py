@@ -3,7 +3,7 @@ import sys
 
 sys.path.insert(0, '..')
 
-import regional_dict.regional_collect as rc
+import regional_dict.regional_dict_helper as rdh
 import location_utils.location_helper as lh
 
 CorpusFiles = [
@@ -51,8 +51,8 @@ def count_regional_words(texts, regional_dict):
         text = text.strip()
         regional_list = []
         for word in text.split(' '):
-            word = rc.standartize(word)
-            word = rc.normalize(word)
+            word = rdh.standartize(word)
+            word = rdh.normalize(word)
             if word in regional_dict:
                 regional_list.append(regional_dict[word])
         if regional_list:
