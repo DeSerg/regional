@@ -1,0 +1,154 @@
+model             : multivariate
+regions           : ../data/classification/top_locs_10.txt
+authors number    : 100
+feature weighting : log_odds
+features to select: 100
+classificator     : sklearn_NB
+95.8 22.4 0.90 
+93.6 38.1 0.75 
+90.3 42.8 0.50 
+79.6 100.0 0.16 
+
+
+
+
+model             : multivariate
+regions           : ../data/classification/top_locs_10.txt
+authors number    : 100
+feature weighting : log_odds
+features to select: 100
+classificator     : NB
+97.1 21.8 0.90 
+93.7 37.0 0.75 
+88.0 44.5 0.50 
+78.0 100.0 0.10 
+
+
+
+
+model             : multivariate
+regions           : ../data/classification/top_locs_10.txt
+authors number    : 100
+feature weighting : log_odds
+features to select: 100
+classificator     : logistic
+nan 0.2 0.90 
+96.4 7.0 0.75 
+88.8 29.2 0.50 
+79.5 100.0 0.13 
+
+
+
+
+model             : multivariate
+regions           : ../data/classification/top_locs_10.txt
+authors number    : 100
+feature weighting : log_odds
+features to select: 100
+classificator     : SVM
+96.4 3.9 0.90 
+96.4 4.8 0.75 
+87.0 21.0 0.50 
+78.5 100.0 0.16 
+
+
+
+
+model             : multivariate
+regions           : ../data/classification/top_locs_10.txt
+authors number    : 100
+feature weighting : log_odds
+features to select: 200
+classificator     : sklearn_NB
+95.6 28.9 0.90 
+93.3 44.0 0.75 
+84.8 58.1 0.50 
+73.4 100.0 0.15 
+
+
+
+
+model             : multivariate
+regions           : ../data/classification/top_locs_10.txt
+authors number    : 100
+feature weighting : log_odds
+features to select: 200
+classificator     : NB
+95.0 27.1 0.90 
+92.3 42.6 0.75 
+84.9 59.7 0.50 
+74.7 100.0 0.10 
+
+
+
+
+model             : multivariate
+regions           : ../data/classification/top_locs_10.txt
+authors number    : 100
+feature weighting : log_odds
+features to select: 200
+classificator     : logistic
+nan 0.5 0.90 
+96.3 10.3 0.75 
+91.1 37.6 0.50 
+74.5 100.0 0.13 
+
+
+
+
+model             : multivariate
+regions           : ../data/classification/top_locs_10.txt
+authors number    : 100
+feature weighting : log_odds
+features to select: 200
+classificator     : SVM
+98.6 9.0 0.90 
+94.6 13.4 0.75 
+82.1 36.4 0.50 
+72.3 100.0 0.17 
+
+
+
+
+model             : multivariate
+regions           : ../data/classification/top_locs_10.txt
+authors number    : 100
+feature weighting : IG
+features to select: 100
+classificator     : sklearn_NB
+94.9 41.6 0.90 
+91.6 52.0 0.75 
+84.7 65.9 0.50 
+65.3 100.0 0.20 
+
+
+
+
+model             : multivariate
+regions           : ../data/classification/top_locs_10.txt
+authors number    : 100
+feature weighting : IG
+features to select: 100
+classificator     : NB
+95.9 34.6 0.90 
+92.2 50.1 0.75 
+85.0 66.1 0.50 
+69.9 100.0 0.10 
+
+
+
+
+model             : multivariate
+regions           : ../data/classification/top_locs_10.txt
+authors number    : 100
+feature weighting : IG
+features to select: 100
+classificator     : logistic
+nan 1.0 0.90 
+95.3 15.1 0.75 
+93.5 45.0 0.50 
+66.1 100.0 0.16 
+
+
+
+

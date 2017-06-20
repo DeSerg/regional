@@ -1,0 +1,10 @@
+region: Irkutskaya Oblast’
+region: Kaliningradskaya Oblast’
+region: Orenburgskaya Oblast’
+region: Tverskaya Oblast’
+region: Novosibirskaya Oblast’
+country: Republic of Kazakhstan
+region: L’vivs’ka Oblast’
+region: Sverdlovskaya Oblast’
+region: Republic of Crimea
+region: Ulyanovsk Oblast

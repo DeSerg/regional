@@ -1,0 +1,87 @@
+region: Vologodskaya Oblast’
+region: Omskaya Oblast’
+region: Orenburgskaya Oblast’
+region: Udmurtskaya Respublika
+region: Volgogradskaya Oblast’
+region: Novgorodskaya Oblast’
+region: Yevreyskaya Avtonomnaya Oblast’
+region: Voronezhskaya Oblast’
+region: Tambovskaya Oblast’
+region: Respublika Mordoviya
+region: Leningradskaya Oblast’
+region: Respublika Khakasiya
+region: Arkhangel’skaya Oblast’
+region: Irkutskaya Oblast’
+region: Tomskaya Oblast’
+region: Kabardino-Balkarskaya Respublika
+region: Lipetskaya Oblast’
+region: Kurskaya Oblast’
+region: Vladimirskaya Oblast’
+region: Kamtchatski Kray
+region: Khanty-Mansiyskiy Avtonomnyy Okrug-Yugra
+region: Chukotskiy Avtonomnyy Okrug
+region: Kemerovskaya Oblast’
+region: Chelyabinskaya Oblast’
+region: Kostromskaya Oblast’
+region: Respublika Ingushetiya
+region: Respublika Buryatiya
+region: Khabarovskiy Kray
+region: Astrakhanskaya Oblast’
+region: Tatarstan
+region: Belgorodskaya Oblast’
+region: Samarskaya Oblast’
+region: Primorskiy Kray
+region: Kurganskaya Oblast’
+region: Sverdlovskaya Oblast’
+region: Perm Krai
+region: Kaluzhskaya Oblast’
+region: Krasnodarskiy Kray
+region: Ulyanovsk Oblast
+region: Magadanskaya Oblast’
+region: Komi
+region: Bryanskaya Oblast’
+region: Saratovskaya Oblast’
+region: Chechenskaya Respublika
+region: Sankt-Peterburg
+region: Respublika Mariy-El
+region: Altayskiy Kray
+region: Kaliningradskaya Oblast’
+region: Bashkortostan
+region: Amurskaya Oblast’
+region: Kirovskaya Oblast’
+region: Dagestan
+region: Tyumenskaya Oblast’
+region: Respublika Tyva
+region: Sakhalinskaya Oblast’
+region: Penzenskaya Oblast’
+region: Karachayevo-Cherkesiya
+region: Respublika Sakha (Yakutiya)
+region: Respublika Altay
+region: Respublika Adygeya
+region: Kalmykiya
+region: Chuvashskaya Respublika
+region: Krasnoyarskiy Kray
+region: Pskovskaya Oblast’
+region: Ivanovskaya Oblast’
+region: Murmanskaya Oblast’
+region: Zabaykal’skiy Kray
+region: Nenetskiy Avtonomnyy Okrug
+region: Stavropol’skiy Kray
+region: Rostovskaya Oblast’
+region: Moscow Oblast
+region: Yamalo-Nenetskiy Avtonomnyy Okrug
+region: Novosibirskaya Oblast’
+region: Nizhegorodskaya Oblast’
+region: Respublika Kareliya
+region: Orlovskaya Oblast’
+region: North Ossetia
+region: Smolenskaya Oblast’
+region: Tul’skaya Oblast’
+region: Ryazanskaya Oblast’
+region: Yaroslavskaya Oblast’
+region: Tverskaya Oblast’
+country: Republic of Kazakhstan
+country: Republic of Belarus
+country: Republic of Estonia
+country: Republic of Moldova
+country: Ukraine
