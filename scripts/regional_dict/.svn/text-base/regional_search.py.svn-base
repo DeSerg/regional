@@ -1,0 +1,159 @@
+﻿"""
+Модуль для поиска по .xml корпусу по словоформам из словаря Руслана.
+
+#NOTE: Содержит в себе вспомогательный класс RegionalWords и публичный метод
+       normalize, которыe стоит вынести в отдельный файл.
+"""
+
+import pandas as pd
+import numpy as np
+import re
+import utility.huge_file_processor as hfp
+import sys
+import json
+from copy import deepcopy
+from collections import defaultdict
+from itertools import chain
+
+
+cyrillic_pattern = re.compile(u"^[а-я]+([-][а-я]+)?$", re.I)
+
+class RegionalWords:
+    LEMMA_COLUMN = u'ЛЕММА'
+    WORDS_COLUMN = u'Список словоформ'
+
+    def __init__(self, filename):
+        self.filename = filename
+        self.excel_sheet = self._excel_sheet()
+
+        self._word_forms_dict = {}
+        self._lemma_locations = {}
+        self._locs_list = []
+
+    def word_forms(self):
+        if not self._word_forms_dict:
+            self._make_lemmatizer()
+        return deepcopy(self._word_forms_dict)
+
+    def locs_list(self):
+        if not self._locs_list:
+            self._locs_list = set(chain.from_iterable(self._make_lemma_locations().values()))
+        return list(self._locs_list)
+
+    def lemma_locs(self, lemma):
+        if not self._lemma_locations:
+            self._make_lemma_locations()
+        return deepcopy(self._lemma_locations.get(lemma, set()))
+
+    def lemmatize(self, word):
+        if not self._word_forms_dict:
+            self._make_lemmatizer()
+        return self._word_forms_dict.get(word, None)
+
+    def _make_lemmatizer(self):
+        self._word_forms_dict = dict(chain.from_iterable(
+            [(standartize(word), lemma) for word in words.split(", ")]
+            for lemma, words in zip(self.excel_sheet[RegionalWords.LEMMA_COLUMN],
+                                    self.excel_sheet[RegionalWords.WORDS_COLUMN])
+            if words is not np.nan)) # распознавание пустой ячейки
+
+    def _make_lemma_locations(self):
+        if not self._lemma_locations:
+            locations_column = 'Standartized locations'
+            self._lemma_locations =\
+                dict((lemma, set(loc_str.split(', ')))
+                     for lemma, loc_str in zip(self.excel_sheet[RegionalWords.LEMMA_COLUMN],
+                                               self.excel_sheet[locations_column]))
+        return self._lemma_locations
+
+    def _excel_sheet(self):
+        xlsx = pd.ExcelFile(self.filename)
+        return xlsx.parse('Sheet1')
+
+
+class RegionalSearch:
+    def __init__(self, filename):
+        self.filename = filename
+        hfp.process_data = self.process_data
+        self.text_data = {'errors': []}
+        self.author_data = {}
+        self.debug = True
+
+    def search(self, word_forms, chunk_size):
+        self._make_word_forms_dict(word_forms)
+        hfp.process_hugefile(self.filename, chunk_size)
+
+    def save(self, text_save_filename, author_save_filename):
+        with open(text_save_filename, 'w') as outfile:
+            json.dump(self.text_data, outfile, ensure_ascii=False)
+        with open(author_save_filename, 'w') as outfile:
+            json.dump(self.author_data, outfile, ensure_ascii=False)
+
+    def process_data(self, lines_piece, **kwargs):
+        try:
+            self.process(lines_piece)
+        except:
+            e = sys.exc_info()[0]
+            self.text_data['errors'].append(e)
+
+            if self.debug is True:
+                raise
+
+    def process(self, lines_piece):
+        for ind, line in enumerate(lines_piece):
+            line = line.strip()
+            if line.startswith('<text'):
+                self.current_header = line
+                self.current_author = extract_field(line, "author")
+                self.current_loc = extract_field(line, "loc")
+                self.current_regional_words = []
+                self.current_words_count = 0
+            elif line.startswith('</text>'):
+                if len(self.current_regional_words) > 0:
+                    # assuming every header appears only once
+                    self.text_data[self.current_header] =\
+                        {'regional_words': self.current_regional_words}
+                if self.current_author not in self.author_data:
+                    self.author_data[self.current_author] = {'count': 0, 'loc': self.current_loc}
+                self.author_data[self.current_author]['count'] += self.current_words_count
+            word = standartize(line.split('\t')[0])
+            normalized = normalize(word)
+            if cyrillic_pattern.match(normalized):
+                self.current_words_count += 1
+                if word in self.word_forms_dict:
+                    self.current_regional_words.append(word)
+                elif normalized in self.word_forms_dict:
+                    self.current_regional_words.append(normalized)
+
+    def _make_word_forms_dict(self, word_forms):
+        self.word_forms_dict = word_forms
+
+def standartize(word):
+    return word.replace(u"ё", u"е")
+
+def normalize(word):
+    return word.lower()
+
+
+def extract_field(line, field):
+    found = re.search('{0}="(.*?)"'.format(field), line)
+    if found:
+        return found.groups(1)[0]
+    else:
+        return 'NA'
+
+
+def run(args):
+    if len(args) < 5:
+        sys.exit("Pass filename, dict_filename, save_filename for texts,"
+                 "save_filename for authors, chunk size")
+    filename = args[0]
+    dict_filename = args[1]
+    text_save_filename = args[2]
+    author_save_filename = args[3]
+    chunk_size = float(args[4])
+
+    rw = RegionalWords(dict_filename)
+    rs = RegionalSearch(filename)
+    rs.search(rw.word_forms(), chunk_size)
+    rs.save(text_save_filename, author_save_filename)

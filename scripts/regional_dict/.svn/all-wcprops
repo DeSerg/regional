@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/!svn/ver/1880/trunk/mining/bin/regional-journal/scripts/regional_json
+END
+regional_json_statistics.py
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/svn/!svn/ver/1886/trunk/mining/bin/regional-journal/scripts/regional_json/regional_json_statistics.py
+END
+content_extractor.py
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/!svn/ver/1827/trunk/mining/bin/regional-journal/scripts/regional_json/content_extractor.py
+END
+regional_search.py
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/!svn/ver/1886/trunk/mining/bin/regional-journal/scripts/regional_json/regional_search.py
+END
+regional_json_prettifyer.py
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/svn/!svn/ver/1827/trunk/mining/bin/regional-journal/scripts/regional_json/regional_json_prettifyer.py
+END
+regional_stats_demonstrator.py
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/svn/!svn/ver/1886/trunk/mining/bin/regional-journal/scripts/regional_json/regional_stats_demonstrator.py
+END

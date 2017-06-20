@@ -1,0 +1,275 @@
+﻿"""
+Модуль для подсчета статистик из подкорпуса по словарю Руслана.
+Данный подкорпус должен формироваться с помощью модулей regional_search и
+regional_json_prettifier.
+
+#NOTE: Возможно этот код стоит лучше разбить на модули и попробовать
+использовать, например, sqlite для более быстрой и удобной работы со статистиками.
+"""
+
+
+import json
+import sys
+import pandas as pd
+
+import regional_json.regional_search as rs
+from copy import deepcopy
+from locations import save_to_file
+from itertools import chain
+from collections import defaultdict
+
+
+class RegionalJsonStatistics:
+    def __init__(self, filename, author_filename, dump_filename, dict_filename,
+                 add_locs_filename, minimal_words_count):
+        self.filename = filename
+        self.author_filename = author_filename
+        self.dump_filename = dump_filename
+        self.dict_filename = dict_filename
+        self.add_locs_filename = add_locs_filename
+        self.minimal_words_count = minimal_words_count
+        self.lemma_statistics = {}
+
+    def preprocess(self):
+        self.json_data = json.load(open(self.filename, 'r'))
+        self.author_data = json.load(open(self.author_filename, 'r'))
+        self.lemmatizer = rs.RegionalWords(self.dict_filename)
+        self._locs_keys_tmp = self.lemmatizer.locs_list()
+
+        self._locs_ind_tmp = dict((key, ind) for ind, key in enumerate(self._locs_keys()))
+        self.admissible_locs =\
+            _make_admissible_locations(self._locs_keys(), self.add_locs_filename)
+        return self
+
+    def calculate_lemma_statistics(self):
+        for id, elem in self.json_data.items():
+            if not elem:
+                continue
+            loc = self._extract_loc(elem.get('loc', 'NA'))
+            city, words, author = elem.get('city', 'NA'), elem['regional_words'], elem['author']
+            for word in words:
+                lemma = self.lemmatizer.lemmatize(word)
+                if lemma is None:
+                    continue
+                if lemma not in self.lemma_statistics:
+                    self.lemma_statistics[lemma] = {'total_count': 0,
+                                                    'locs': defaultdict(int),
+                                                    'cities': defaultdict(int),
+                                                    'locs_ids': defaultdict(list),
+                                                    'author_counts': defaultdict(int),
+                                                    'locs_authors': defaultdict(set)}
+                current_lemma_statistics = self.lemma_statistics[lemma]
+                current_lemma_statistics['total_count'] += 1
+                current_lemma_statistics['cities'][city] += 1
+                current_lemma_statistics['author_counts'][author] += 1
+                current_lemma_statistics['locs'][loc] += 1
+                current_lemma_statistics['locs_ids'][loc].append(id)
+                current_lemma_statistics['locs_authors'][loc].add(author)
+        for lemma, stats in self.lemma_statistics.items():
+            stats['locs_authors'] = dict([(loc, list(authors))
+                                          for loc, authors in stats['locs_authors'].items()])
+
+    def make_authors_stat(self):
+        header = ['Author', 'Loc', 'Words count', 'Positive lemmas', 'Negative lemmas',
+                  'Not positive lemmas', 'Positive occs', 'Negative occs', 'Not positive occs']
+        authors_stats = self._prepare_authors_statistics()
+        rows = [[author, elem['loc'], elem['word count'],
+                 elem['positive'], elem['negative'], elem['not positive'],
+                 elem['positive occs'], elem['negative occs'], elem['not positive occs']]
+                for author, elem in authors_stats.items()]
+        result = [header] + sorted(rows, reverse=True, key=lambda x: x[2])
+        return result
+
+    def make_locs_count_stat(self):
+        header = ['Loc', 'Authors count', 'Words count', 'Positive occs', 'Negative occs',
+                  'Not positive occs', 'Positive lemmas', 'Negative lemmas', 'Not positive lemmas']
+        loc_stats = self._prepare_locs_statistics()
+        rows = [[loc, elem['authors'], elem['word count'],
+                 elem['positive occs'], elem['negative occs'], elem['not positive occs'],
+                 elem['positive'], elem['negative'], elem['not positive']]
+                for loc, elem in loc_stats.items()]
+        standard_locs_rows = list(filter(lambda x: x[0] in self._locs_keys(), rows))
+        other_locs_rows = list(filter(lambda x: not x[0] in self._locs_keys(), rows))
+        result = ([header] + sorted(standard_locs_rows, reverse=True, key=lambda x: x[2]) +
+                  sorted(other_locs_rows, reverse=True, key=lambda x: x[2]))
+        return result
+
+    def make_cross_table(self):
+        def_rows = ['Lemma', 'Count', 'Positive', 'Negative', 'Not positive',
+                    'Authors count', 'Positive authors', 'Negative authors', 'Not positive authors']
+        header = def_rows + list(chain(*((key, '') for key in self._locs_keys()))) + ["Other Locs"]
+        rows = []
+        columns_number = len(header)
+        for lemma, elem in self.lemma_statistics.items():
+            row = [0] * columns_number
+            other_locs_freq = []
+            current_lemma_stats = defaultdict(int)
+            for loc, authors in elem['locs_authors'].items():
+                relevant_authors = [author for author in authors
+                                    if (self.author_data[author]['count'] >=
+                                        self.minimal_words_count)]
+                authors_count = len(relevant_authors)
+                occurrences_count =\
+                    sum(elem['author_counts'][author] for author in relevant_authors)
+                admissibility = self._get_admissibility_status(loc, lemma)
+                current_lemma_stats[admissibility] += occurrences_count
+                current_lemma_stats[admissibility + " authors"] += authors_count
+                current_admissible_locs = self.admissible_locs.get(loc, [])
+                for admissible_loc in current_admissible_locs:
+                    column_index = self._locs_ind(admissible_loc, len(def_rows))
+                    row[column_index] += occurrences_count
+                    row[column_index + 1] += authors_count
+                if loc not in self._locs_keys():
+                    other_locs_freq.append(
+                        "{0}={1},{2}".format(loc, occurrences_count, authors_count))
+            key_types = ['positive', 'negative', 'not positive']
+            row[0] = lemma
+            row[1] = sum(current_lemma_stats[key] for key in key_types)
+            row[2:5] = [current_lemma_stats[key] for key in key_types]
+            row[5] = sum(current_lemma_stats[key + " authors"] for key in key_types)
+            row[6:9] = [current_lemma_stats[key + " authors"] for key in key_types]
+            row[-1] = ";".join(other_locs_freq)
+            rows.append(row)
+        result = [header] + sorted(rows, reverse=True, key=lambda x: x[1])
+        return result
+
+    def _prepare_authors_statistics(self):
+        authors_stats = {}
+        for lemma, lemma_stats in self.lemma_statistics.items():
+            for author, count in lemma_stats['author_counts'].items():
+                loc = self.author_data[author].get('loc', 'NA')
+                loc = self._extract_loc(loc)
+                author_words_count = self.author_data[author]['count']
+                if author_words_count < self.minimal_words_count:
+                    continue
+                if author not in authors_stats:
+                    authors_stats[author] = {
+                        'loc': loc, 'word count': author_words_count,
+                        'positive': 0, 'positive occs': 0, 'negative': 0,
+                        'negative occs': 0, 'not positive': 0, 'not positive occs': 0}
+                admissibility = self._get_admissibility_status(loc, lemma)
+                authors_stats[author][admissibility] += 1
+                authors_stats[author][admissibility + " occs"] += count
+        return authors_stats
+
+    def dump(self):
+        with open(self.dump_filename, "w") as outfile:
+            json.dump(self.lemma_statistics, outfile, ensure_ascii=False)
+
+    def _extract_loc(self, loc):
+        '''
+        returns loc if loc is a standartized loc (Москва->Москва)
+        returns standartized loc if loc contains standartized loc as in (Москва, Россия->Москва),
+        returns loc, otherwise
+        '''
+        if loc in self.admissible_locs:
+            return loc
+        for loc_segment in loc.split(","):
+            if loc_segment.strip() in self.admissible_locs:
+                return loc_segment.strip()
+        return loc
+
+    def _get_lemma_locs(self, lemma):
+        return self.lemmatizer.lemma_locs(lemma)
+
+    def _is_admissible_loc(self, loc, standard_loc):
+        if standard_loc in self.admissible_locs[loc]:
+            return 1  # Positive (loc = Киев, standard_loc = Украина or standard_loc = Киев)
+        elif loc in self.admissible_locs[standard_loc]:
+            return 0  # Not positive (loc = Украина, standard_loc = Киев)
+        else:
+            return -1  # Negative
+
+    def _get_admissibility_status(self, loc, lemma):
+        statuses = {-1: 'negative', 0: 'not positive', 1: 'positive'}
+        loc = self._extract_loc(loc)
+        if loc in self.admissible_locs:
+            is_admissible_loc = max([self._is_admissible_loc(loc, elem)
+                                     for elem in self._get_lemma_locs(lemma)])
+        else:
+            is_admissible_loc = 0
+        return statuses[is_admissible_loc]
+
+    def _prepare_locs_statistics(self):
+        loc_stats = {}
+        DEFAULT_LOC_STATS = {'word count': 0, 'author count': set(), 'positive occs': 0,
+                             'negative occs': 0, 'not positive occs': 0,
+                             'positive': 0, 'negative': 0, 'not positive': 0}
+        for lemma, lemma_stats in self.lemma_statistics.items():
+            lemma_adm_locs = set()
+            for loc, authors in lemma_stats['locs_authors'].items():
+                authors = set(filter(
+                    lambda x: self.author_data[x]['count'] >= self.minimal_words_count, authors))
+                if len(authors) == 0:
+                    continue
+                admissible_locs = set(self.admissible_locs.get(loc, []) + [loc])
+                occs_count = sum(lemma_stats['author_counts'][x] for x in authors)
+                for adm_loc in admissible_locs:
+                    if adm_loc not in loc_stats:
+                        loc_stats[adm_loc] = deepcopy(DEFAULT_LOC_STATS)
+                    current_loc_stats = loc_stats[adm_loc]
+                    if adm_loc not in lemma_adm_locs:
+                        lemma_adm_locs.add(adm_loc)
+                        key = self._get_admissibility_status(adm_loc, lemma)
+                        occs_key = key + ' occs'
+                        current_loc_stats[key] += 1
+                        current_loc_stats[occs_key] += occs_count
+        for loc in self._locs_keys():
+            if loc not in loc_stats:
+                loc_stats[loc] = DEFAULT_LOC_STATS
+        for author, author_data in self.author_data.items():
+            loc, count = self._extract_loc(author_data['loc']), author_data['count']
+            if count >= minimal_words_count and loc in loc_stats:
+                admissible_locs = set(self.admissible_locs.get(loc, []) + [loc])
+                for adm_loc in admissible_locs:
+                    current_loc_stats = loc_stats[adm_loc]
+                    current_loc_stats['author count'] += 1
+                    current_loc_stats['word count'] += count
+
+        return loc_stats
+
+    def _locs_keys(self):
+        return self._locs_keys_tmp
+
+    def _locs_ind(self, loc, start_ind):
+        # every region corresponds to 2 columns
+        return start_ind + 2 * self._locs_ind_tmp[loc]
+
+
+# используется в других модулях, поэтому вынесено из класса
+def _make_admissible_locations(standard_locs, add_locs_filename):
+    admissible_locs = defaultdict(list)
+    for key in standard_locs:
+        admissible_locs[key] = [key]
+    additional_locs_map = pd.read_csv(add_locs_filename, sep='\t', header=0)
+    for loc, general_loc in zip(list(additional_locs_map['Подрегион']),
+                                list(additional_locs_map['Регион'])):
+        admissible_locs[loc].append(general_loc)
+    return admissible_locs
+
+
+def run(args):
+    if len(args) != 8:
+        sys.exit("Pass type(lemmas, locs, authors), json file, authors json file, dump json file,\
+                  dict filename, additional locations filename,\
+                  minimal number of words for an author and save .csv filename")
+
+    type, filename, author_filename, dump_filename, dict_filename, add_locs_filename = args[:6]
+    minimal_words_count, save_filename = int(args[6]), args[7]
+
+    rjs = RegionalJsonStatistics(filename, author_filename, dump_filename, dict_filename,
+                                 add_locs_filename, minimal_words_count)
+    rjs.preprocess()
+    rjs.calculate_lemma_statistics()
+    rjs.dump()
+    if type == 'lemmas':
+        save_to_file(save_filename, rjs.make_cross_table())
+    elif type == 'locs':
+        save_to_file(save_filename, rjs.make_locs_count_stat())
+    elif type == 'authors':
+        save_to_file(save_filename, rjs.make_authors_stat())
+    else:
+        sys.exit("Wrong type -{0}-".format(type))
+
+if __name__ == "__main__":
+    run()

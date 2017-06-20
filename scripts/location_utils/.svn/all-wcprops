@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/!svn/ver/1827/trunk/mining/bin/regional-journal/scripts/locations
+END
+locations_freq.py
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/!svn/ver/1827/trunk/mining/bin/regional-journal/scripts/locations/locations_freq.py
+END
+__init__.py
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/!svn/ver/1827/trunk/mining/bin/regional-journal/scripts/locations/__init__.py
+END
+locations_mapper.py
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/!svn/ver/1886/trunk/mining/bin/regional-journal/scripts/locations/locations_mapper.py
+END
+locations_filter.py
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/!svn/ver/1827/trunk/mining/bin/regional-journal/scripts/locations/locations_filter.py
+END

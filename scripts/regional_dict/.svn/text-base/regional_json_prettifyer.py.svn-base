@@ -1,0 +1,57 @@
+"""
+Модуль приведения найденных с помощью модуля regional_search данных в удобный и
+очищенный вид.
+"""
+
+import json
+import sys
+import re
+
+
+class RegionalJsonPrettifyer:
+    def __init__(self, filename):
+        self.data = json.load(open(filename, 'r'))
+        self.converted_data = {'errors': self.data.pop('errors')}
+
+    def prettify(self, filename):
+        self._convert_keys()
+        self._save(filename)
+
+    def _convert_keys(self):
+        for attr_str in self.data:
+            id_match = re.search('id="(.*?)"', attr_str)
+            if id_match:
+                id = id_match.groups(1)[0]
+                self.converted_data[id] = self._get_attrs(attr_str)
+                self.converted_data[id]['regional_words'] = self.data[attr_str]['regional_words']
+
+    def _get_attrs(self, attr_str):
+        hash = {}
+        keys = ['city', 'loc', 'genrei', 'source', 'birth', 'year', 'author', 'url']
+        for key in keys:
+            attr = self._get_attr(key, attr_str)
+            if attr:
+                hash[attr[0]] = attr[1]
+        return hash
+
+    def _get_attr(self, key, attr_str):
+        found = re.search('{0}="(.*?)"'.format(key), attr_str)
+        if found:
+            return (key, found.groups(1)[0])
+        else:
+            return None
+
+    def _save(self, filename):
+        with open(filename, 'w') as outfile:
+            json.dump(self.converted_data, outfile, ensure_ascii=False)
+
+
+def run(args):
+    if len(args) < 2:
+        sys.exit("Pass json file and save filename")
+
+    filename = args[0]
+    save_filename = args[1]
+
+    rjp = RegionalJsonPrettifyer(filename)
+    rjp.prettify(save_filename)

@@ -1,0 +1,326 @@
+﻿'''
+Модуль для вывода статистики.
+
+Пока что сырой
+'''
+
+import pandas as pd
+import numpy as np
+import sys
+import csv
+from itertools import chain, filterfalse, zip_longest
+from collections import OrderedDict
+
+import regional_json.regional_search as rs
+import regional_json.regional_json_statistics as rjs
+from locations import save_to_file
+
+
+class RegionalStatsDemonstrator:
+
+    def __init__(self, dict_filename, add_locs_filename, cross_table_filename, loc_table_filename):
+        self.dict_filename = dict_filename
+        self.add_locs_filename = add_locs_filename
+        self.cross_table = pd.DataFrame.from_csv(cross_table_filename, sep='\t')
+        self.loc_table = pd.DataFrame.from_csv(loc_table_filename, sep='\t')
+
+        self.lemmatizer = rs.RegionalWords(dict_filename)
+        self.locs_keys = self.lemmatizer.locs_list()
+        self.admissible_locs =\
+            rjs._make_admissible_locations(self.locs_keys, self.add_locs_filename)
+        self.lemma_stats, self.loc_stats = OrderedDict(), {}
+
+    def read_tables(self):
+        self._read_cross_table()
+        self._read_loc_table()
+
+    def output_detailed(self, save_filename, top_lemmas_number, min_occs_number):
+        TOP_REGIONS_NUMBER = 10
+        header_format_string = "{0:<12}{1:<24}{2:<6}{3:<14}{1:<24}{2:<6}{3:<14}\n"
+        fillvalue = (None, (None, None))
+        if top_lemmas_number == -1:
+            top_lemmas_number = len(self.lemma_stats)
+        with open(save_filename, "w") as fout:
+            for i, (lemma, stats) in zip(range(top_lemmas_number), self.lemma_stats.items()):
+                expected_locs, other_locs = self._group_locs_for_lemma(lemma)
+                expected_stats = dict(filter(lambda x: x[0] in expected_locs,
+                                             stats['locs'].items()))
+                other_stats = dict(filter(lambda x: x[0] in other_locs and x[1][0] > 0,
+                                          stats['locs'].items()))
+                records_number = min(max(len(expected_stats), len(other_stats)), TOP_REGIONS_NUMBER)
+
+                # sorted by occurrences number
+                fout.write(header_format_string.format(lemma, "Регион", "Вхожд", "Процент"))
+                for j, ((first_key, first_elem), (second_key, second_elem)) in\
+                    zip(range(records_number),
+                        zip_longest(sorted(expected_stats.items(),
+                                           key=(lambda x: x[1][0]), reverse=True),
+                                    sorted(other_stats.items(),
+                                           key=(lambda x: x[1][0]), reverse=True),
+                        fillvalue = fillvalue)):
+                    fout.write("{0:<12}".format("") +
+                               self._table_record_formatter(first_key, first_elem[0],
+                                                            stats['total']['count'], 100) +
+                               self._table_record_formatter(second_key, second_elem[0],
+                                                            stats['total']['count'], 100) + "\n")
+                fout.write("\n")
+
+                # sorted by authors number
+                fout.write(header_format_string.format("", "Регион", "Авт", "Процент"))
+                for j, ((first_key, first_elem), (second_key, second_elem)) in\
+                    zip(range(records_number),
+                        zip_longest(sorted(expected_stats.items(),
+                                           key=(lambda x: x[1][1]), reverse=True),
+                        sorted(other_stats.items(), key=(lambda x: x[1][1]), reverse=True),
+                        fillvalue = fillvalue)):
+                    fout.write(
+                        "{0:<12}".format("") + RegionalStatsDemonstrator._table_record_formatter(
+                            first_key, first_elem[1], stats['total']['authors count'], 100) +
+                        RegionalStatsDemonstrator._table_record_formatter(
+                            second_key, second_elem[1],
+                            stats['total']['authors count'], 100) + "\n")
+                fout.write("\n")
+
+                # sorted by occurrences percentage in case there are enough occurrences
+                fout.write(header_format_string.format("", "Регион", "Вхожд", "Вхожд/100000"))
+                for j, ((first_key, first_elem), (second_key, second_elem)) in\
+                    zip(range(records_number), zip_longest(
+                            sorted(filter(lambda x: x[1][0] >= min_occs_number,
+                                          expected_stats.items()),
+                                   key=(lambda x: (x[1][0] / self.loc_stats[x[0]]['words'])),
+                                   reverse = True),
+                            sorted(filter(lambda x: x[1][0] >= min_occs_number,
+                                          other_stats.items()),
+                                   key=(lambda x: (x[1][0] / self.loc_stats[x[0]]['words'])),
+                                   reverse=True),
+                            fillvalue = fillvalue)):
+                    fout.write(
+                        "{0:<12}".format("") + RegionalStatsDemonstrator._table_record_formatter(
+                            first_key, first_elem[0],
+                            self.loc_stats[first_key]['words'] if first_key else 0, 100000) +
+                        RegionalStatsDemonstrator._table_record_formatter(
+                            second_key, second_elem[0],
+                            self.loc_stats[second_key]['words'] if second_key else 0, 100000)
+                        + "\n")
+                fout.write("\n")
+
+                # sorted by authors percentage in case there are enough authors
+                fout.write(header_format_string.format("", "Регион", "Авт", "Авт/100"))
+                for j, ((first_key, first_elem), (second_key, second_elem)) in\
+                    zip(range(records_number), zip_longest(
+                            sorted(filter(lambda x: x[1][1] >= min_occs_number,
+                                          expected_stats.items()),
+                                   key=(lambda x: (x[1][1] / self.loc_stats[x[0]]['authors'])),
+                                   reverse = True),
+                            sorted(filter(lambda x: x[1][1] >= min_occs_number,
+                                          other_stats.items()),
+                                   key=(lambda x: (x[1][1] / self.loc_stats[x[0]]['authors'])),
+                                   reverse=True),
+                            fillvalue = fillvalue)):
+                    fout.write(
+                        "{0:<12}".format("") + RegionalStatsDemonstrator._table_record_formatter(
+                            first_key, first_elem[1],
+                            self.loc_stats[first_key]['authors'] if first_key else 0, 100) +
+                        RegionalStatsDemonstrator._table_record_formatter(
+                            second_key, second_elem[1],
+                            self.loc_stats[second_key]['authors'] if second_key else 0, 100)
+                        + "\n")
+                fout.write("\n\n")
+
+    def output_extract(self, type, save_filename, top_lemmas_number, min_occs_number):
+        if type not in ['words', 'authors']:
+            raise ValueError("type should be 'words' or 'authors'")
+        if top_lemmas_number == -1:
+            top_lemmas_number = len(self.lemma_stats)
+        if type == 'words':
+            index = 0
+            positive = 'positive'
+            negative = 'negative'
+            not_positive = 'not positive'
+            mult = 100000
+        elif type == 'authors':
+            index = 1
+            positive = 'positive authors'
+            negative = 'negative authors'
+            not_positive = 'not positive authors'
+            mult = 100
+        extraction_stats = dict()
+        for i, (lemma, stats) in zip(range(top_lemmas_number), self.lemma_stats.items()):
+            if stats['total']['positive'] == 0 and stats['total']['negative'] == 0:
+                continue
+            expected_locs, other_locs = self._group_locs_for_lemma(lemma)
+            expected_stats = dict(filter(lambda x: x[0] in expected_locs,
+                                         stats['locs'].items()))
+            other_stats = dict(filter(lambda x: x[0] in other_locs and x[1][0] > 0,
+                                      stats['locs'].items()))
+            current_stats = dict()
+            # initializing total counts
+            current_stats['positive'] = [stats['total'][positive], stats['total'][positive]]
+            current_stats['negative'] = [stats['total'][negative], stats['total'][negative]]
+            current_stats['not positive'] = [stats['total'][not_positive]]
+            # subtracting counts for regions with small number of authors
+            for loc, counts in expected_stats.items():
+                if not self._has_enough_authors(loc):
+                    current_stats['positive'][1] -= stats['locs'][loc][index]
+            for loc, counts in other_stats.items():
+                if not self._has_enough_authors(loc):
+                    current_stats['negative'][1] -= stats['locs'][loc][index]
+            # positive fraction
+            total = [current_stats['positive'][0] + current_stats['negative'][0],
+                     current_stats['positive'][1] + current_stats['negative'][1]]
+            current_stats['pos fraction'] =\
+                [100 * current_stats['positive'][0] / total[0] if total[0] > 0 else 0.0,
+                 100 * current_stats['positive'][1] / total[1] if total[1] > 0 else 0.0]
+            # positive fraction without Moscow
+            first = [current_stats['positive'][0], current_stats['positive'][1]]
+            moscow = stats['locs']['Москва'][index] if 'Москва' in stats['locs'] else 0
+            if u'Москва' in expected_locs:
+                first[0] -= moscow
+                first[1] -= moscow
+            current_stats['pos fraction without Moscow'] =\
+                [100 * first[0] / (total[0] - moscow) if first[0] > 0.0 else 0.0,
+                 100 * first[1] / (total[1] - moscow) if first[1] > 0.0 else 0.0]
+            # lemma percentage
+            lemma_percentage = {loc: (stats['locs'][loc][index] / self.loc_stats[loc][type])
+                                for loc in stats['locs']}
+            # чтобы не было дублирования
+            def _form_percentages(locs):
+                return [dict(filter(lambda x: x[0] in locs, lemma_percentage.items())),
+                        dict(filter(lambda x:(x[0] in locs and self._has_enough_authors(x[0]) and
+                                    stats['locs'][x[0]][index] >= min_occs_number),
+                             lemma_percentage.items()))]
+            expected_locs_percentage = _form_percentages(expected_locs)
+            other_locs_percentage = _form_percentages(other_locs)
+            # extracting top other locs
+            expected_locs_count = [len(elem) for elem in expected_locs_percentage]
+            other_locs_percentage =\
+                [dict(sorted(elem.items(),
+                             key=(lambda x: x[1]), reverse=True)[:(count if count > 0 else 1)])
+                 for elem, count in zip(other_locs_percentage, expected_locs_count)]
+            # comparing positive and negative percentage
+            # mult is used to come from fractions to counts per mult
+            current_stats['mean pos percentage'] =\
+                [(mult * np.mean(list(elem.values())) if len(elem) > 0 else 0.0)
+                 for elem in expected_locs_percentage]
+            # на случай, если элемент other_locs_percentage
+            # оказался короче элемента в expected_locs_percentage
+            negative_values = [list(elem.values()) + [0.0] * (max(count - len(elem), 0))
+                               for elem, count in zip(other_locs_percentage, expected_locs_count)]
+            current_stats['mean neg percentage'] =\
+                [((mult * np.mean(elem)) if len(elem) > 0 else 0.0) for elem in negative_values]
+            current_stats['pos neg ratio'] =\
+                [(first / second if second > 0.0 else (np.inf if first > 0.0 else 0.0))
+                 for first, second in zip(current_stats['mean pos percentage'],
+                                          current_stats['mean neg percentage'])]
+            top_locs_percentage =\
+                [sorted(chain(first.items(), second.items()), key=(lambda x: x[1]), reverse=True)
+                 for first, second, count
+                 in zip(expected_locs_percentage, other_locs_percentage, expected_locs_count)]
+            top_locs_average_percentage =\
+                [mult * (np.mean(list(x[1] for x in elem)[:count] if max(count, len(elem)) > 0
+                         else 0.0))
+                 for count, elem in zip(expected_locs_count, top_locs_percentage)]
+            current_stats['percentage defect'] =\
+                [((second - first) / second if second > 0.0 else 0.0)
+                 for first, second in zip(current_stats['mean pos percentage'],
+                                          top_locs_average_percentage)]
+            current_stats['rank defect'] =\
+                [((np.mean([[elem[0] for elem in second].index(loc) for loc in first]) -
+                   (count - 1) / 2) / count) if count > 0 else 1.0
+                 for first, second, count in zip(expected_locs_percentage,
+                                                 top_locs_percentage, expected_locs_count)]
+            extraction_stats[lemma] = current_stats
+
+        # outputting counts
+        order = ['positive', 'negative', 'not positive', 'pos fraction',
+                 'pos fraction without Moscow', 'mean pos percentage',
+                 'mean neg percentage', 'pos neg ratio', 'percentage defect', 'rank defect']
+        header = [u'Лемма'] + list(chain.from_iterable([elem, ""] for elem in order[:2])) +\
+                 [order[2]] + list(chain.from_iterable([elem, ""] for elem in order[3:]))
+        rows = [([lemma] +
+                 list(map(number_formatter, chain.from_iterable(stats[key] for key in order))))
+                for lemma, stats in sorted(extraction_stats.items(),
+                                           key=(lambda x: np.min(x[1]['pos neg ratio'])),
+                                           reverse=True)]
+        save_to_file(save_filename, [header] + rows)
+
+    def _read_cross_table(self):
+        first_column = 8
+        last_column = self.cross_table.columns.get_loc('Other Locs')
+        for i, (lemma, row) in enumerate(self.cross_table.iterrows()):
+            current_loc_stats = dict([(self.cross_table.columns[j], (row[j], row[j+1]))
+                                      for j in range(first_column, last_column, 2)
+                                      if row[j] > 0 or row[j+1] > 0])
+            self.lemma_stats[lemma] = {
+                'total': {loc.lower(): value for loc, value
+                          in list(zip(self.cross_table.columns, row))[:first_column]},
+                'locs': current_loc_stats}
+
+    def _read_loc_table(self):
+        authors_count_ind, words_count_ind = 0, 1
+        for loc, row in self.loc_table.iterrows():
+            for adm_loc in self.admissible_locs.get(loc, []):
+                if adm_loc not in self.locs_keys:
+                    continue
+                if adm_loc not in self.loc_stats:
+                    self.loc_stats[adm_loc] = {'authors': 0, 'words': 0}
+                self.loc_stats[adm_loc]['authors'] += row[authors_count_ind]
+                self.loc_stats[adm_loc]['words'] += row[words_count_ind]
+
+    @staticmethod
+    def _table_record_formatter(key, value, denominator, multiplier):
+        if value == 0:  # preventing zero division
+            denominator = 1.0
+        return("{0:<24}{1:<6}".format(key if key else "", value if value else "") +
+               ("{0:<14.4f}".format(multiplier * value / denominator)
+               if value else "{0:<14}".format("")))
+
+    def _is_maximal_admissible_loc(self, loc, lemma):
+        lemma_locs = self.lemmatizer.lemma_locs(lemma)
+        if loc not in lemma_locs:
+            return False
+        for adm_loc in self.admissible_locs[loc]:
+            if adm_loc in lemma_locs and loc != adm_loc:
+                return False
+        return True
+
+    def _group_locs_for_lemma(self, lemma):
+        expected_locs = [loc for loc in self.lemmatizer.lemma_locs(lemma)
+                         if self._is_maximal_admissible_loc(loc, lemma)]
+        possible_locs =\
+            set(chain.from_iterable(self.admissible_locs[loc] for loc in expected_locs))
+        other_locs = [loc for loc in self.locs_keys
+                      if (loc not in possible_locs and all((elem not in expected_locs)
+                                                           for elem in self.admissible_locs[loc]))]
+        return expected_locs, other_locs
+
+    def _has_enough_authors(self, loc, MINIMAL_AUTHORS_NUMBER = 50):
+        return self.loc_stats[loc]['authors'] >= MINIMAL_AUTHORS_NUMBER
+
+
+def number_formatter(x):
+    if isinstance(x, int):
+        formatter = "{0:d}"
+    elif isinstance(x, float):
+        formatter = "{0:.2f}"
+    return formatter.format(x)
+
+
+def run(args):
+    if len(args) != 8:
+        sys.exit("Pass type(detail, extract_by_words or extract_by_authors),\
+                  dict_filename, add_locs_filename, cross_table_filename, loc_table_filename,\
+                  save_filename, top lemmas number, minimal number of occurences to output")
+    (type, dict_filename, add_locs_filename, cross_table_filename,
+     loc_table_filename, save_filename, top_lemmas_number, min_occs_number) = args
+    top_lemmas_number, min_occs_number = int(top_lemmas_number), int(min_occs_number)
+
+    rsd = RegionalStatsDemonstrator(dict_filename, add_locs_filename,
+                                    cross_table_filename, loc_table_filename)
+    rsd.read_tables()
+    if type == 'detail':
+        rsd.output_detailed(save_filename, top_lemmas_number, min_occs_number)
+    elif type == 'extract_by_words':
+        rsd.output_extract('words', save_filename, top_lemmas_number, min_occs_number)
+    elif type == 'extract_by_authors':
+        rsd.output_extract('authors', save_filename, top_lemmas_number, min_occs_number)
