@@ -5,7 +5,7 @@ from xml.etree import cElementTree as ET
 
 sys.path.insert(0, '..')
 
-import regional_dict.regional_collect as rc
+import regional_dict.regional_dict_helper as rdh
 import location_utils.location_helper as lh
 import corpus.corpus_helper as ch
 
@@ -116,8 +116,12 @@ def region_stat():
 
 
 # number of authors, texts, texts with regional words in countries
-def country_stat():
-    countries = {}
+def country_stat(regional_dict_filename, out_filename):
+
+    rw = rdh.RegionalWords(regional_dict_filename)
+    regional_dict = rw.word_forms()
+
+    countries = {} # authors_num, regional_words_num
 
     for corpus_filename, total_num_lines in ch.CorpusFiles:
         with open(corpus_filename) as corpus_f:
@@ -125,22 +129,23 @@ def country_stat():
                 login, location, texts = ch.extract_data_from_line(line)
                 if (lh.RegionKey in location) and (lh.CountryKey in location) and (len(texts) >= ch.MinTextLen):
                     country = location[lh.CountryKey]
+                    without_regional_words, regional_texts = ch.count_regional_words(texts, regional_dict)
+                    if country in countries:
+                        countries[country] = [1, len(regional_texts)]
+                    else:
+                        countries[country][0] += 1
+                        countries[country][1] += len(regional_texts)
 
-                line_split = line.split(' ', 1)
-                if len(line_split) != 2:
-                    print('Line without author?\n%s\n' % line)
-                    return 0
-                author_login, data = line_split[0], line_split[1]
+                ch.print_progress(line_num, total_num_lines, corpus_filename)
 
-                # Location
-                locations = lh.corpus_loc_re.findall(data)
-                if len(locations) > 0:
-                    authors_with_region += 1
-
-                progress = line_num / total_num_lines * 100
-                sys.stderr.write("%s: %d%%; %d\r" % (corpus_filename, progress, authors_with_region))
-                sys.stderr.flush()
-
+    with open(out_filename, 'w') as out_f:
+        countries_list = [(country, value) for country, value in countries]
+        countries_list.sort(key=lambda x: x[1][0], reverse=True)
+        for country, country_stat in countries_list:
+            authors_num = country_stat[0]
+            regional_words_num = country_stat[1]
+            out_f.write('%s: %s, %f\n' % (country, authors_num, regional_words_num / authors_num))
+            
 
 def main(argv):
     region_stat()
