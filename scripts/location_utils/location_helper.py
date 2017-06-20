@@ -1,4 +1,5 @@
 import re
+import json
 
 CityKey = 'city'
 RegionKey = 'region'
@@ -47,3 +48,10 @@ def parse_classification_locations(locations_filename):
                 countries.append(location)
 
     return regions, countries
+
+
+def load_locations_map(locations_map_filename):
+    loc_map = {}
+    with open(locations_map_filename) as loc_map_f:
+        loc_map = json.load(loc_map_f)
+    return loc_map

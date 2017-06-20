@@ -116,7 +116,9 @@ def region_stat():
 
 
 # number of authors, texts, texts with regional words in countries
-def country_stat(regional_dict_filename, out_filename):
+def country_stat(location_map_filename, regional_dict_filename, out_filename):
+
+    locations_map = lh.load_locations_map(location_map_filename)
 
     rw = rdh.RegionalWords(regional_dict_filename)
     regional_dict = rw.word_forms()
@@ -126,7 +128,7 @@ def country_stat(regional_dict_filename, out_filename):
     for corpus_filename, total_num_lines in ch.CorpusFiles:
         with open(corpus_filename) as corpus_f:
             for line_num, line in enumerate(corpus_f):
-                login, location, texts = ch.extract_data_from_line(line)
+                login, location, texts = ch.extract_data_from_line(line, locations_map)
                 if (lh.RegionKey in location) and (lh.CountryKey in location) and (len(texts) >= ch.MinTextLen):
                     country = location[lh.CountryKey]
                     without_regional_words, regional_texts = ch.count_regional_words(texts, regional_dict)
@@ -148,10 +150,10 @@ def country_stat(regional_dict_filename, out_filename):
 
 
 def main(argv):
-    if len(argv) < 2:
-        print('Usage: script.py regional_dict.xlsx out_file')
+    if len(argv) < 3:
+        print('Usage: script.py locations_map.json regional_dict.xlsx out_file')
 
-    country_stat(argv[0], argv[1])
+    country_stat(argv[0], argv[1], argv[2])
 
 
 if __name__ == "__main__":
