@@ -125,7 +125,7 @@ def country_stat(location_map_filename, regional_dict_filename, out_filename):
 
     countries = {} # authors_num, regional_words_num
 
-    for corpus_filename, total_num_lines in ch.CorpusFiles:
+    for filename_num, (corpus_filename, total_num_lines) in enumerate(ch.CorpusFiles):
         with open(corpus_filename) as corpus_f:
             for line_num, line in enumerate(corpus_f):
                 login, location, texts = ch.extract_data_from_line(line, locations_map)
@@ -138,10 +138,16 @@ def country_stat(location_map_filename, regional_dict_filename, out_filename):
                         countries[country][0] += 1
                         countries[country][1] += len(regional_texts)
 
-                ch.print_progress(line_num, total_num_lines, corpus_filename)
+                ch.print_progress(line_num, total_num_lines, corpus_filename, filename_num)
+
+    with open(out_filename + '_', 'w') as out_f:
+        for country, country_stat in countries:
+            authors_num = country_stat[0]
+            regional_words_num = country_stat[1]
+            out_f.write('%s: %s, %f\n' % (country, authors_num, regional_words_num / authors_num))
 
     with open(out_filename, 'w') as out_f:
-        countries_list = [(country, value) for country, value in countries]
+        countries_list = [(country, value) for country, value in countries.items()]
         countries_list.sort(key=lambda x: x[1][0], reverse=True)
         for country, country_stat in countries_list:
             authors_num = country_stat[0]

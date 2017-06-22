@@ -66,7 +66,9 @@ def count_regional_words(texts, regional_dict):
     return without_regional_words, regional_texts
 
 
-def print_progress(cur_line_num, total_line_num, cur_filename):
+def print_progress(cur_line_num, total_line_num, cur_filename, filename_num=-1):
     progress = cur_line_num / total_line_num * 100
+    if filename_num != -1:
+        cur_filename = cur_filename + '(%d)' % (filename_num + 1)
     sys.stderr.write("%s: %d%%   \r" % (cur_filename, progress))
     sys.stderr.flush()
