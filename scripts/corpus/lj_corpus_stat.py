@@ -141,7 +141,7 @@ def country_stat(location_map_filename, regional_dict_filename, out_filename):
                 ch.print_progress(line_num, total_num_lines, corpus_filename, filename_num)
 
     with open(out_filename + '_', 'w') as out_f:
-        for country, country_stat in countries:
+        for country, country_stat in countries.items():
             authors_num = country_stat[0]
             regional_words_num = country_stat[1]
             out_f.write('%s: %s, %f\n' % (country, authors_num, regional_words_num / authors_num))
