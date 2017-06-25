@@ -30,11 +30,7 @@ def extract_location(line):
         return ''
 
     loc = [s.strip() for s in loc]
-
-    line_extr = loc[0]
-    for loc_item in loc[1:]:
-        line_extr = line_extr + ',' + loc_item
-    return line_extr
+    return ';'.join(loc)
 
 def reform_location(match):
     global loc_replaced
