@@ -42,7 +42,7 @@ def reform_location(match):
 
     location = match.group(1)
     extr_location = extract_location(location)
-    print(extr_location)
+    # print(extr_location)
 
     if extr_location in locations_map:
         loc_replaced += 1
