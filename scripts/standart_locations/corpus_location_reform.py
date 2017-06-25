@@ -47,7 +47,16 @@ def reform_location(match):
     if extr_location in locations_map:
         loc_replaced += 1
         loc_total += 1
-        result_loc = locations_map[extr_location]
+        loc_dict = locations_map[extr_location]
+        result = []
+        if lh.CityKey in loc_dict:
+            result.append('%s: %s' % (lh.CityKey, loc_dict[lh.CityKey]))
+        if lh.RegionKey in loc_dict:
+            result.append('%s: %s' % (lh.RegionKey, loc_dict[lh.RegionKey]))
+        if lh.CountryKey in loc_dict:
+            result.append('%s: %s' % (lh.CountryKey, loc_dict[lh.CountryKey]))
+
+        result_loc = '; '.join(result)
     else:
         loc_total += 1
         result_loc = extr_location
