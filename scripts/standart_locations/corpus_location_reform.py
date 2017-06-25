@@ -2,7 +2,10 @@ import os
 import sys
 import re
 
-locations_map_filename = 'out.txt'
+sys.path.insert(0, '..')
+
+import location_utils.location_helper as lh
+
 locations_map = {}
 
 loc_replaced = 0
@@ -57,26 +60,23 @@ loc_files = [
     ('/data/kaa/compose/m.lj.compactR/groups.txt', 732129)
 ]
 
-walk_dir = '/data/safe/livejournal.com/pure-texts'
-output = 'all_unuqie_locations.txt'
+output_dir = '/data/popov_s/lj_corpus'
 
 
 def main(argv):
     if len(argv) != 1:
-        print('Usage: script.py locations_map.txt')
+        print('Usage: script.py locations_map.json')
         return
 
-
     locations_map_filename = argv[0]
-    read_locations_map(locations_map_filename)
-
-    print('walk_dir = ' + walk_dir)
+    global locations_map
+    locations_map = lh.load_locations_map(locations_map_filename)
 
     xml_p = re.compile("<Location><o>(.*?)</o></Location>")
     compose_p = re.compile('attr_\d+_Location="(.*?)"')
 
     for file_num, (file, total_num_lines) in enumerate(loc_files):
-        result_file = 'groups' + str(file_num) + '.txt'
+        result_file = output_dir + '/groups' + str(file_num) + '.txt'
         with open(result_file, 'w') as out_f:
             with open(file, 'r') as f:
                 print('On file', file)
