@@ -17,7 +17,7 @@ MinTextLen = 5000
 
 def extract_data_from_line(line, locations_map):
 
-    FailVal = ('', '', '')
+    FailVal = (False, '', '', '')
 
     line_split = line.split(' ', 1)
     if len(line_split) != 2:
@@ -45,7 +45,7 @@ def extract_data_from_line(line, locations_map):
     texts = lh.corpus_text_re.findall(line)
     texts = [re.sub(lh.xml_re, '', text) for text in texts]
 
-    return author_login, author_location, texts
+    return True, author_login, author_location, texts
 
 
 # texts - list of texts written by author, regional_dict - mapping from regional words word forms to lemmas

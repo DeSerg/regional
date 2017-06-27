@@ -75,26 +75,90 @@ def mapped_region_stat(locations_map_filename, regions_filename):
         locations_map = json.load(locations_map_f)
     regions, countries = lh.parse_classification_locations(regions_filename)
 
-    authors_marked = 0
+    authors_mapped = 0
     locs_map_out = {}
-    for corpus_filename, total_num_lines in loc_files:
+    for filename_num, (corpus_filename, total_num_lines) in enumerate(ch.CorpusFiles):
         with open(corpus_filename) as corpus_f:
             for line_num, line in enumerate(corpus_f):
-                authors_marked += parse_line(line, locations_map, regions, countries, locs_map_out)
+                success, login, location, texts = ch.extract_data_from_line(line, locations_map)
+                if not success:
+                    continue
 
-                progress = line_num / total_num_lines * 100
-                sys.stderr.write("%s: %d%%   \r" % (corpus_filename, progress))
-                sys.stderr.flush()
-    print('Authors with region: %d' % authors_marked)
+                if lh.RegionKey in location:
+                    region = location[lh.RegionKey]
+                    if region in regions:
+                        if region in locs_map_out:
+                            locs_map_out[region] += 1
+                        else:
+                            locs_map_out[region] = 1
+
+                if lh.CountryKey in location:
+                    country = location[lh.CountryKey]
+                    if country in countries:
+                        if country in locs_map_out:
+                            locs_map_out[country] += 1
+                        else:
+                            locs_map_out[country] = 1
+
+                authors_mapped += 1
+
+                ch.print_progress(line_num, total_num_lines, corpus_filename, filename_num)
+
+    print('Authors with region: %d' % authors_mapped)
     for loc, num in locs_map_out.items():
         print('%s: %d' % (loc, num))
 
+
+# number of authors with regional texts and location which was successfully mapped by standartificator
+def mapped_region_stat_regional(locations_map, regional_dict, regions, countries, out_filename):
+
+    authors_mapped = 0
+    locs_map_out = {}
+    for filename_num, (corpus_filename, total_num_lines) in enumerate(ch.CorpusFiles):
+        with open(corpus_filename) as corpus_f:
+            for line_num, line in enumerate(corpus_f):
+                success, login, location, texts = ch.extract_data_from_line(line, locations_map)
+                if not success:
+                    continue
+
+                without_regional_words, regional_texts = ch.count_regional_words(texts, regional_dict)
+                if not regional_texts:
+                    continue
+
+                if lh.RegionKey in location:
+                    region = location[lh.RegionKey]
+                    if region in regions:
+                        if region in locs_map_out:
+                            locs_map_out[region] += 1
+                        else:
+                            locs_map_out[region] = 1
+
+                if lh.CountryKey in location:
+                    country = location[lh.CountryKey]
+                    if country in countries:
+                        if country in locs_map_out:
+                            locs_map_out[country] += 1
+                        else:
+                            locs_map_out[country] = 1
+
+                authors_mapped += 1
+
+                ch.print_progress(line_num, total_num_lines, corpus_filename, filename_num)
+
+    print('Authors with location and regional text: %d' % authors_mapped)
+
+    locs_map_list = [(location, loc_stat) for location, loc_stat in locs_map_out.items()]
+    sorted(locs_map_list, key=lambda x: x[1])
+
+    with open(out_filename, 'w') as out_f:
+        for loc, num in locs_map_list:
+            out_f.write('%s: %d\n' % (loc, num))
 
 # number of authors with location
 def region_stat():
     authors_with_region = 0
 
-    for corpus_filename, total_num_lines in loc_files:
+    for filename_num, (corpus_filename, total_num_lines) in enumerate(ch.CorpusFiles):
         with open(corpus_filename) as corpus_f:
             for line_num, line in enumerate(corpus_f):
                 line_split = line.split(' ', 1)
@@ -108,27 +172,22 @@ def region_stat():
                 if len(locations) > 0:
                     authors_with_region += 1
 
-                progress = line_num / total_num_lines * 100
-                sys.stderr.write("%s: %d%%; %d\r" % (corpus_filename, progress, authors_with_region))
-                sys.stderr.flush()
+                ch.print_progress(line_num, total_num_lines, corpus_filename, filename_num)
 
     print('\n\n%d\n\n' % authors_with_region)
 
 
 # number of authors, texts, texts with regional words in countries
-def country_stat(location_map_filename, regional_dict_filename, out_filename):
-
-    locations_map = lh.load_locations_map(location_map_filename)
-
-    rw = rdh.RegionalWords(regional_dict_filename)
-    regional_dict = rw.word_forms()
+def country_stat(locations_map, regional_dict, out_filename):
 
     countries = {} # authors_num, regional_words_num
 
     for filename_num, (corpus_filename, total_num_lines) in enumerate(ch.CorpusFiles):
         with open(corpus_filename) as corpus_f:
             for line_num, line in enumerate(corpus_f):
-                login, location, texts = ch.extract_data_from_line(line, locations_map)
+                success, login, location, texts = ch.extract_data_from_line(line, locations_map)
+                if not success:
+                    continue
                 texts_joined = '\n'.join(texts)
                 if (lh.RegionKey in location) and (lh.CountryKey in location) and (len(texts_joined) >= ch.MinTextLen):
                     country = location[lh.CountryKey]
@@ -156,11 +215,24 @@ def country_stat(location_map_filename, regional_dict_filename, out_filename):
             out_f.write('%s: %s, %f\n' % (country, authors_num, regional_words_num / authors_num))
 
 
+
 def main(argv):
     if len(argv) < 3:
         print('Usage: script.py locations_map.json regional_dict.xlsx out_file')
 
-    country_stat(argv[0], argv[1], argv[2])
+        location_map_filename = argv[0]
+        locations_map = lh.load_locations_map(location_map_filename)
+
+        regional_dict_filename = argv[1]
+        rw = rdh.RegionalWords(regional_dict_filename)
+        regional_dict = rw.word_forms()
+
+        locations_filename = argv[2]
+        regions, countries = lh.parse_classification_locations(locations_filename)
+
+        out_filename = argv[3]
+
+        mapped_region_stat_regional(locations_map, regional_dict, regions, countries, out_filename)
 
 
 if __name__ == "__main__":
