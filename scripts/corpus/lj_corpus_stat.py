@@ -215,8 +215,10 @@ def country_stat(locations_map, regional_dict, out_filename):
             out_f.write('%s: %s, %f\n' % (country, authors_num, regional_words_num / authors_num))
 
 
-
 def main(argv):
+
+    print('main')
+
     if len(argv) < 4:
         print('Usage: script.py locations_map.json regional_dict.xlsx locations_file.txt out_file')
 
