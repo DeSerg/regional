@@ -129,7 +129,8 @@ def country_stat(location_map_filename, regional_dict_filename, out_filename):
         with open(corpus_filename) as corpus_f:
             for line_num, line in enumerate(corpus_f):
                 login, location, texts = ch.extract_data_from_line(line, locations_map)
-                if (lh.RegionKey in location) and (lh.CountryKey in location) and (len(texts) >= ch.MinTextLen):
+                texts_joined = '\n'.join(texts)
+                if (lh.RegionKey in location) and (lh.CountryKey in location) and (len(texts_joined) >= ch.MinTextLen):
                     country = location[lh.CountryKey]
                     without_regional_words, regional_texts = ch.count_regional_words(texts, regional_dict)
                     if not country in countries:
