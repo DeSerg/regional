@@ -6,10 +6,11 @@ def cross_classify():
     # six main tune parameters
     types = ['multivariate', 'log_multinomial'] # + 'multinomial'
     region_filenames = [
-        '../data/classification/db_locs_main.txt',
-        '../data/classification/db_top_locs_10.txt',
-        '../data/classification/db_top_locs_20.txt',
-        '../data/classification/db_top_locs_50.txt'
+        # '../data/classification/db_locs_main.txt',
+        # '../data/classification/db_top_locs_10.txt',
+        # '../data/classification/db_top_locs_20.txt',
+        # '../data/classification/db_top_locs_50.txt'
+        '../data/classification/db_locs_main_exp.txt'
     ]
     author_nums = [100, 500]
     feature_weightings = ['log_odds', 'IG', 'ambiguity', 'none']  # + 'weight'
