@@ -36,7 +36,7 @@ def cross_classify():
 
 def cross_classify_old():
     # six main tune parameters
-    types = ['multivariate', 'multinomial']
+    types = ['multivariate', 'log_multinomial']  # + 'multinomial'
     region_filenames = [
         '../data/classification/top_locs_10.txt',
         '../data/classification/top_locs_20.txt',
@@ -45,25 +45,25 @@ def cross_classify_old():
     author_nums = [100, 500]
     feature_weightings = ['log_odds', 'IG', 'ambiguity', 'none']  # + 'weight'
     features_to_select_arr = [100, 200]
-    classifiers = ['sklearn_NB', 'NB', 'logistic', 'SVM']
+    classifiers = ['NB', 'logistic', 'SVM']  # + 'sklearn_NB'
 
     # other parameters
-    dict_filename = '../data/dictionary_29_01_2015.xlsx'
+    dict_filename = '../data/dictionary_29_05_2017.xlsx'
     train_json = '../data/classification/lj_for_classification.json'
 
-
-    for type in types:
-        for region_filename in region_filenames:
-            for author_num in author_nums:
-                for feature_weighting in feature_weightings:
-                    for features_to_select in features_to_select_arr:
-                        for classifier in classifiers:
+    for region_filename in region_filenames:
+        for classifier in classifiers:
+            for feature_weighting in feature_weightings:
+                for type in types:
+                    for author_num in author_nums:
+                        for features_to_select in features_to_select_arr:
                             rclassify.run_parsed(
                                 region_filename, dict_filename, train_json,
                                 type, author_num,
                                 feature_weighting, features_to_select,
                                 classifier, new_corpus=False)
                             print('\n\n\n')
+
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
