@@ -19,8 +19,8 @@ import sklearn.linear_model as sklm
 import sklearn.svm as sksvm
 
 # from sklearn.base import BaseEstimator, ClassifierMixin
-sys.path.insert(0, '/Users/deserg/Google Drive/MIPT/Regional/classification/scripts')
-additional_loc_filename = '/Users/deserg/Google Drive/MIPT/Regional/classification/data/additional_mapping.csv'
+sys.path.insert(0, '..')
+additional_loc_filename = '../data/additional_mapping.csv'
 
 import regional_dict.regional_dict_helper as rdh
 import regional_dict.regional_json_statistics as rjs
