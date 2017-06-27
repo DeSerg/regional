@@ -38,8 +38,8 @@ def cross_classify_old():
     # six main tune parameters
     types = ['multivariate', 'log_multinomial']  # + 'multinomial'
     region_filenames = [
-        '../data/classification/top_locs_10.txt',
-        '../data/classification/top_locs_20.txt',
+        # '../data/classification/top_locs_10.txt',
+        # '../data/classification/top_locs_20.txt',
         '../data/classification/top_locs_50.txt'
     ]
     author_nums = [100, 500]
