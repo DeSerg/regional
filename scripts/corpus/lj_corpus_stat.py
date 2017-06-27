@@ -2,7 +2,6 @@ import sys
 import json
 import re
 from xml.etree import cElementTree as ET
-import matplotlib.pyplot as plt
 
 sys.path.insert(0, '..')
 
