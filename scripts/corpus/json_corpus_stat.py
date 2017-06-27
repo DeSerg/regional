@@ -191,23 +191,43 @@ def countries_num(class_corp):
         total += num
     print('\ntotal: %d' % total)
 
+def regions_for_country(class_corp, country_targ):
+    regions = {}
+
+    for author, data in class_corp.items():
+        if not lh.RegionKey in data or not lh.CountryKey in data:
+            continue
+
+        country = data[lh.CountryKey]
+        if country != country_targ:
+            continue
+
+        region = data[lh.RegionKey]
+        pos_text_flag = 0
+        if data[lh.PositiveTextsKey]:
+            pos_text_flag = 1
+
+        if region in regions:
+            regions[region][0] += 1
+            regions[region][1] += pos_text_flag
+        else:
+            regions[region] = [1, pos_text_flag]
+
+    regions_list = [(region, data[0], data[1]) for region, data in regions.items()]
+    regions_list.sort(key=lambda x: x[2])
+    for region, authors_num, reg_authors_num in regions_list:
+        print('%s: %d, %d' % (region, authors_num, reg_authors_num))
+
 def main(argv):
     json_filename = argv[0]
     regions_filename = argv[1]
-    # stat_certain_old(json_filename, regions_filename)
-    # stat_certain(json_filename, regions_filename)
-    # stat_certain(json_filename, regions_filename)
-    # stat_reg_country(json_filename)
-
-    # regions_rus_stat(json_filename)
 
     class_corp = {}
     with open(json_filename) as json_file:
         class_corp = json.load(json_file)
 
-    countries_num(class_corp)
-    # stat_certain(class_corp, '')
-
+    regions_for_country(class_corp, 'Republic of Kazakhstan')
+    # regions_for_country(class_corp, lh.RussiaName)
 
 
 

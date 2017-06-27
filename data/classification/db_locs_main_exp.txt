@@ -1,0 +1,83 @@
+region: Yamalo-Nenetskiy Avtonomnyy Okrug
+region: Amurskaya Oblast’
+region: Respublika Buryatiya
+region: Respublika Khakasiya
+region: Kamtchatski Kray
+region: Kostromskaya Oblast’
+region: Dagestan
+region: Kurganskaya Oblast’
+region: Kurskaya Oblast’
+region: Sakhalinskaya Oblast’
+region: Respublika Mariy-El
+region: Smolenskaya Oblast’
+region: Tambovskaya Oblast’
+region: Komi
+region: Ivanovskaya Oblast’
+region: Orlovskaya Oblast’
+region: Respublika Kareliya
+region: Pskovskaya Oblast’
+region: Bryanskaya Oblast’
+region: Lipetskaya Oblast’
+region: Penzenskaya Oblast’
+region: Vladimirskaya Oblast’
+region: Kaluzhskaya Oblast’
+region: Belgorodskaya Oblast’
+region: Novgorodskaya Oblast’
+region: Ryazanskaya Oblast’
+region: Murmanskaya Oblast’
+region: Chuvashskaya Respublika
+region: Arkhangel’skaya Oblast’
+region: Khanty-Mansiyskiy Avtonomnyy Okrug-Yugra
+region: Vologodskaya Oblast’
+region: Stavropol’skiy Kray
+region: Tul’skaya Oblast’
+region: Astrakhanskaya Oblast’
+region: Kirovskaya Oblast’
+region: Orenburgskaya Oblast’
+region: Udmurtskaya Respublika
+region: Tverskaya Oblast’
+region: Yaroslavskaya Oblast’
+region: Kemerovskaya Oblast’
+region: Ulyanovsk Oblast
+region: Khabarovskiy Kray
+region: Altayskiy Kray
+region: Saratovskaya Oblast’
+region: Tyumenskaya Oblast’
+region: Volgogradskaya Oblast’
+region: Voronezhskaya Oblast’
+region: Tomskaya Oblast’
+region: Omskaya Oblast’
+region: Primorskiy Kray
+region: Kaliningradskaya Oblast’
+region: Bashkortostan
+region: Tatarstan
+region: Irkutskaya Oblast’
+region: Nizhegorodskaya Oblast’
+region: Krasnoyarskiy Kray
+region: Krasnodarskiy Kray
+region: Perm Krai
+region: Rostovskaya Oblast’
+region: Chelyabinskaya Oblast’
+region: Samarskaya Oblast’
+region: Sverdlovskaya Oblast’
+region: Novosibirskaya Oblast’
+region: Leningradskaya Oblast’
+region: Moscow Oblast
+region: Ivano-Frankivs’ka Oblast’
+region: Poltavs’ka Oblast’
+region: Kyiv Oblast
+region: Mykolayivs’ka Oblast’
+region: Luhans’ka Oblast’
+region: Zaporiz’ka Oblast’
+region: Gorod Sevastopol
+region: Republic of Crimea
+region: Donets’ka Oblast’
+region: L’vivs’ka Oblast’
+region: Dnipropetrovska Oblast'
+region: Odes’ka Oblast’
+region: Kharkivs’ka Oblast’
+region: Misto Kyyiv
+country: Republic of Kazakhstan
+country: Republic of Belarus
+country: Republic of Estonia
+country: Republic of Moldova
