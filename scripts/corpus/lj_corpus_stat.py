@@ -155,7 +155,7 @@ def mapped_region_stat_regional(locations_map, regional_dict, regions, countries
             out_f.write('%d: %s: %d\n' % (loc_num, loc, num))
 
     with open(out_filename + '.json', 'w') as out_f:
-        json.dump(locs_map_out, out_f)
+        json.dump(locs_map_out, out_f, ensure_ascii=False)
 
 
 # number of authors with location
