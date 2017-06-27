@@ -19,8 +19,6 @@ def plot(x, y):
     # axes.set_ylim([0, 1000])
     # axes.set_xlim([25, 90])
 
-
-
     plt.show()
 
 # def table(index_table):

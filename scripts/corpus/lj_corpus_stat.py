@@ -2,6 +2,7 @@ import sys
 import json
 import re
 from xml.etree import cElementTree as ET
+import matplotlib.pyplot as plt
 
 sys.path.insert(0, '..')
 
@@ -148,11 +149,15 @@ def mapped_region_stat_regional(locations_map, regional_dict, regions, countries
     print('Authors with location and regional text: %d' % authors_mapped)
 
     locs_map_list = [(location, loc_stat) for location, loc_stat in locs_map_out.items()]
-    sorted(locs_map_list, key=lambda x: x[1])
+    locs_map_list.sort(key=lambda x: x[1])
 
     with open(out_filename, 'w') as out_f:
-        for loc, num in locs_map_list:
-            out_f.write('%s: %d\n' % (loc, num))
+        for loc_num, (loc, num) in enumerate(locs_map_list, 1):
+            out_f.write('%d: %s: %d\n' % (loc_num, loc, num))
+
+    with open(out_filename + '.json', 'w') as out_f:
+        json.dump(locs_map_out, out_f)
+
 
 # number of authors with location
 def region_stat():
