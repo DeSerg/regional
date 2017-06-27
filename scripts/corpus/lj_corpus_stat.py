@@ -217,19 +217,23 @@ def country_stat(locations_map, regional_dict, out_filename):
 
 
 def main(argv):
-    if len(argv) < 3:
-        print('Usage: script.py locations_map.json regional_dict.xlsx out_file')
+    if len(argv) < 4:
+        print('Usage: script.py locations_map.json regional_dict.xlsx locations_file.txt out_file')
 
+        print(0)
         location_map_filename = argv[0]
         locations_map = lh.load_locations_map(location_map_filename)
 
+        print(1)
         regional_dict_filename = argv[1]
         rw = rdh.RegionalWords(regional_dict_filename)
         regional_dict = rw.word_forms()
 
+        print(2)
         locations_filename = argv[2]
         regions, countries = lh.parse_classification_locations(locations_filename)
 
+        print(3)
         out_filename = argv[3]
 
         mapped_region_stat_regional(locations_map, regional_dict, regions, countries, out_filename)
