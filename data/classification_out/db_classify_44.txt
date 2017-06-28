@@ -438,3 +438,907 @@ feature weighting : none
 model             : log_multinomial
 authors number    : 500
 features to select: 200
+57.3 7.6 0.90 
+54.0 12.5 0.75 
+54.9 23.1 0.50 
+35.9 100.0 0.02 
+
+
+
+
+regions           : ../data/classification/top_locs_50.txt
+classificator     : logistic
+feature weighting : log_odds
+model             : multivariate
+authors number    : 100
+features to select: 100
+nan 0.0 0.90 
+nan 0.0 0.75 
+89.7 0.8 0.50 
+35.3 100.0 0.02 
+
+
+
+
+regions           : ../data/classification/top_locs_50.txt
+classificator     : logistic
+feature weighting : log_odds
+model             : multivariate
+authors number    : 100
+features to select: 200
+nan 0.0 0.90 
+nan 0.0 0.75 
+88.7 1.5 0.50 
+40.0 100.0 0.03 
+
+
+
+
+regions           : ../data/classification/top_locs_50.txt
+classificator     : logistic
+feature weighting : log_odds
+model             : multivariate
+authors number    : 500
+features to select: 100
+nan 0.0 0.90 
+nan 0.0 0.75 
+93.0 1.9 0.50 
+42.9 100.0 0.02 
+
+
+
+
+regions           : ../data/classification/top_locs_50.txt
+classificator     : logistic
+feature weighting : log_odds
+model             : multivariate
+authors number    : 500
+features to select: 200
+nan 0.0 0.90 
+nan 0.0 0.75 
+33.9 3.0 0.50 
+46.1 100.0 0.02 
+
+
+
+
+regions           : ../data/classification/top_locs_50.txt
+classificator     : logistic
+feature weighting : log_odds
+model             : log_multinomial
+authors number    : 100
+features to select: 100
+nan 0.0 0.90 
+nan 0.1 0.75 
+83.3 2.2 0.50 
+31.9 100.0 0.02 
+
+
+
+
+regions           : ../data/classification/top_locs_50.txt
+classificator     : logistic
+feature weighting : log_odds
+model             : log_multinomial
+authors number    : 100
+features to select: 200
+nan 0.0 0.90 
+nan 0.2 0.75 
+86.2 3.0 0.50 
+39.5 100.0 0.03 
+
+
+
+
+regions           : ../data/classification/top_locs_50.txt
+classificator     : logistic
+feature weighting : log_odds
+model             : log_multinomial
+authors number    : 500
+features to select: 100
+nan 0.0 0.90 
+nan 0.2 0.75 
+64.8 1.3 0.50 
+41.1 100.0 0.02 
+
+
+
+
+regions           : ../data/classification/top_locs_50.txt
+classificator     : logistic
+feature weighting : log_odds
+model             : log_multinomial
+authors number    : 500
+features to select: 200
+nan 0.0 0.90 
+71.8 0.3 0.75 
+51.3 2.1 0.50 
+43.9 100.0 0.02 
+
+
+
+
+regions           : ../data/classification/top_locs_50.txt
+classificator     : logistic
+feature weighting : IG
+model             : multivariate
+authors number    : 100
+features to select: 100
+nan 0.0 0.90 
+nan 0.0 0.75 
+80.0 4.1 0.50 
+33.6 100.0 0.05 
+
+
+
+
+regions           : ../data/classification/top_locs_50.txt
+classificator     : logistic
+feature weighting : IG
+model             : multivariate
+authors number    : 100
+features to select: 200
+nan 0.0 0.90 
+nan 0.0 0.75 
+87.5 5.0 0.50 
+32.3 100.0 0.05 
+
+
+
+
+regions           : ../data/classification/top_locs_50.txt
+classificator     : logistic
+feature weighting : IG
+model             : multivariate
+authors number    : 500
+features to select: 100
+nan 0.0 0.90 
+nan 0.1 0.75 
+64.6 4.4 0.50 
+36.7 100.0 0.04 
+
+
+
+
+regions           : ../data/classification/top_locs_50.txt
+classificator     : logistic
+feature weighting : IG
+model             : multivariate
+authors number    : 500
+features to select: 200
+nan 0.0 0.90 
+nan 0.1 0.75 
+69.6 5.0 0.50 
+32.4 100.0 0.04 
+
+
+
+
+regions           : ../data/classification/top_locs_50.txt
+classificator     : logistic
+feature weighting : IG
+model             : log_multinomial
+authors number    : 100
+features to select: 100
+nan 0.0 0.90 
+94.3 0.8 0.75 
+78.9 6.6 0.50 
+30.3 100.0 0.04 
+
+
+
+
+regions           : ../data/classification/top_locs_50.txt
+classificator     : logistic
+feature weighting : IG
+model             : log_multinomial
+authors number    : 100
+features to select: 200
+nan 0.0 0.90 
+94.1 0.9 0.75 
+80.7 7.5 0.50 
+31.1 100.0 0.04 
+
+
+
+
+regions           : ../data/classification/top_locs_50.txt
+classificator     : logistic
+feature weighting : IG
+model             : log_multinomial
+authors number    : 500
+features to select: 100
+nan 0.0 0.90 
+68.7 0.5 0.75 
+69.8 4.3 0.50 
+32.9 100.0 0.04 
+
+
+
+
+regions           : ../data/classification/top_locs_50.txt
+classificator     : logistic
+feature weighting : IG
+model             : log_multinomial
+authors number    : 500
+features to select: 200
+nan 0.0 0.90 
+79.3 0.5 0.75 
+67.6 5.2 0.50 
+29.6 100.0 0.03 
+
+
+
+
+regions           : ../data/classification/top_locs_50.txt
+classificator     : logistic
+feature weighting : ambiguity
+model             : multivariate
+authors number    : 100
+features to select: 100
+nan 0.0 0.90 
+nan 0.0 0.75 
+83.1 3.0 0.50 
+41.0 100.0 0.03 
+
+
+
+
+regions           : ../data/classification/top_locs_50.txt
+classificator     : logistic
+feature weighting : ambiguity
+model             : multivariate
+authors number    : 100
+features to select: 200
+nan 0.0 0.90 
+nan 0.0 0.75 
+85.8 4.6 0.50 
+31.5 100.0 0.05 
+
+
+
+
+regions           : ../data/classification/top_locs_50.txt
+classificator     : logistic
+feature weighting : ambiguity
+model             : multivariate
+authors number    : 500
+features to select: 100
+nan 0.0 0.90 
+nan 0.0 0.75 
+44.0 3.0 0.50 
+45.5 100.0 0.03 
+
+
+
+
+regions           : ../data/classification/top_locs_50.txt
+classificator     : logistic
+feature weighting : ambiguity
+model             : multivariate
+authors number    : 500
+features to select: 200
+nan 0.0 0.90 
+nan 0.1 0.75 
+67.7 3.6 0.50 
+34.1 100.0 0.04 
+
+
+
+
+regions           : ../data/classification/top_locs_50.txt
+classificator     : logistic
+feature weighting : ambiguity
+model             : log_multinomial
+authors number    : 100
+features to select: 100
+nan 0.0 0.90 
+91.3 0.5 0.75 
+82.6 4.3 0.50 
+41.4 100.0 0.03 
+
+
+
+
+regions           : ../data/classification/top_locs_50.txt
+classificator     : logistic
+feature weighting : ambiguity
+model             : log_multinomial
+authors number    : 100
+features to select: 200
+nan 0.0 0.90 
+97.5 0.7 0.75 
+82.3 6.5 0.50 
+34.0 100.0 0.04 
+
+
+
+
+regions           : ../data/classification/top_locs_50.txt
+classificator     : logistic
+feature weighting : ambiguity
+model             : log_multinomial
+authors number    : 500
+features to select: 100
+nan 0.0 0.90 
+nan 0.2 0.75 
+56.3 1.9 0.50 
+46.3 100.0 0.03 
+
+
+
+
+regions           : ../data/classification/top_locs_50.txt
+classificator     : logistic
+feature weighting : ambiguity
+model             : log_multinomial
+authors number    : 500
+features to select: 200
+nan 0.0 0.90 
+74.7 0.4 0.75 
+70.3 3.3 0.50 
+36.6 100.0 0.03 
+
+
+
+
+regions           : ../data/classification/top_locs_50.txt
+classificator     : logistic
+feature weighting : none
+model             : multivariate
+authors number    : 100
+features to select: 100
+nan 0.0 0.90 
+nan 0.0 0.75 
+89.1 5.3 0.50 
+32.1 100.0 0.05 
+
+
+
+
+regions           : ../data/classification/top_locs_50.txt
+classificator     : logistic
+feature weighting : none
+model             : multivariate
+authors number    : 100
+features to select: 200
+nan 0.0 0.90 
+nan 0.0 0.75 
+89.1 5.3 0.50 
+32.1 100.0 0.05 
+
+
+
+
+regions           : ../data/classification/top_locs_50.txt
+classificator     : logistic
+feature weighting : none
+model             : multivariate
+authors number    : 500
+features to select: 100
+nan 0.0 0.90 
+95.0 0.1 0.75 
+70.0 5.3 0.50 
+28.4 100.0 0.04 
+
+
+
+
+regions           : ../data/classification/top_locs_50.txt
+classificator     : logistic
+feature weighting : none
+model             : multivariate
+authors number    : 500
+features to select: 200
+nan 0.0 0.90 
+95.0 0.1 0.75 
+70.0 5.3 0.50 
+28.4 100.0 0.04 
+
+
+
+
+regions           : ../data/classification/top_locs_50.txt
+classificator     : logistic
+feature weighting : none
+model             : log_multinomial
+authors number    : 100
+features to select: 100
+nan 0.0 0.90 
+94.1 0.9 0.75 
+81.2 8.1 0.50 
+31.3 100.0 0.04 
+
+
+
+
+regions           : ../data/classification/top_locs_50.txt
+classificator     : logistic
+feature weighting : none
+model             : log_multinomial
+authors number    : 100
+features to select: 200
+nan 0.0 0.90 
+94.1 0.9 0.75 
+81.2 8.1 0.50 
+31.3 100.0 0.04 
+
+
+
+
+regions           : ../data/classification/top_locs_50.txt
+classificator     : logistic
+feature weighting : none
+model             : log_multinomial
+authors number    : 500
+features to select: 100
+nan 0.0 0.90 
+79.0 0.6 0.75 
+67.0 5.6 0.50 
+27.4 100.0 0.04 
+
+
+
+
+regions           : ../data/classification/top_locs_50.txt
+classificator     : logistic
+feature weighting : none
+model             : log_multinomial
+authors number    : 500
+features to select: 200
+nan 0.0 0.90 
+79.0 0.6 0.75 
+67.0 5.6 0.50 
+27.4 100.0 0.04 
+
+
+
+
+regions           : ../data/classification/top_locs_50.txt
+classificator     : SVM
+feature weighting : log_odds
+model             : multivariate
+authors number    : 100
+features to select: 100
+nan 0.0 0.90 
+nan 0.0 0.75 
+nan 0.2 0.50 
+19.4 100.0 0.03 
+
+
+
+
+regions           : ../data/classification/top_locs_50.txt
+classificator     : SVM
+feature weighting : log_odds
+model             : multivariate
+authors number    : 100
+features to select: 200
+nan 0.1 0.90 
+nan 0.2 0.75 
+nan 0.4 0.50 
+25.4 100.0 0.03 
+
+
+
+
+regions           : ../data/classification/top_locs_50.txt
+classificator     : SVM
+feature weighting : log_odds
+model             : multivariate
+authors number    : 500
+features to select: 100
+nan 0.0 0.90 
+nan 0.0 0.75 
+nan 1.3 0.50 
+12.5 100.0 0.02 
+
+
+
+
+regions           : ../data/classification/top_locs_50.txt
+classificator     : SVM
+feature weighting : log_odds
+model             : multivariate
+authors number    : 500
+features to select: 200
+nan 0.1 0.90 
+nan 0.1 0.75 
+nan 0.8 0.50 
+22.0 100.0 0.03 
+
+
+
+
+regions           : ../data/classification/top_locs_50.txt
+classificator     : SVM
+feature weighting : log_odds
+model             : log_multinomial
+authors number    : 100
+features to select: 100
+nan 0.3 0.90 
+nan 0.5 0.75 
+nan 0.8 0.50 
+15.7 100.0 0.03 
+
+
+
+
+regions           : ../data/classification/top_locs_50.txt
+classificator     : SVM
+feature weighting : log_odds
+model             : log_multinomial
+authors number    : 100
+features to select: 200
+nan 0.4 0.90 
+nan 0.7 0.75 
+nan 1.4 0.50 
+24.2 100.0 0.03 
+
+
+
+
+regions           : ../data/classification/top_locs_50.txt
+classificator     : SVM
+feature weighting : log_odds
+model             : log_multinomial
+authors number    : 500
+features to select: 100
+69.5 0.3 0.90 
+67.2 0.5 0.75 
+63.7 0.6 0.50 
+13.8 100.0 0.03 
+
+
+
+
+regions           : ../data/classification/top_locs_50.txt
+classificator     : SVM
+feature weighting : log_odds
+model             : log_multinomial
+authors number    : 500
+features to select: 200
+nan 0.4 0.90 
+nan 0.7 0.75 
+0.0 1.0 0.50 
+22.0 100.0 0.03 
+
+
+
+
+regions           : ../data/classification/top_locs_50.txt
+classificator     : SVM
+feature weighting : IG
+model             : multivariate
+authors number    : 100
+features to select: 100
+91.3 0.4 0.90 
+85.7 1.0 0.75 
+69.4 2.6 0.50 
+30.5 100.0 0.04 
+
+
+
+
+regions           : ../data/classification/top_locs_50.txt
+classificator     : SVM
+feature weighting : IG
+model             : multivariate
+authors number    : 100
+features to select: 200
+100.0 0.5 0.90 
+84.7 1.1 0.75 
+76.1 3.0 0.50 
+29.5 100.0 0.05 
+
+
+
+
+regions           : ../data/classification/top_locs_50.txt
+classificator     : SVM
+feature weighting : IG
+model             : multivariate
+authors number    : 500
+features to select: 100
+84.9 0.3 0.90 
+76.7 1.1 0.75 
+52.5 2.4 0.50 
+33.7 100.0 0.04 
+
+
+
+
+regions           : ../data/classification/top_locs_50.txt
+classificator     : SVM
+feature weighting : IG
+model             : multivariate
+authors number    : 500
+features to select: 200
+64.9 0.7 0.90 
+62.9 1.8 0.75 
+49.6 4.0 0.50 
+29.7 100.0 0.05 
+
+
+
+
+regions           : ../data/classification/top_locs_50.txt
+classificator     : SVM
+feature weighting : IG
+model             : log_multinomial
+authors number    : 100
+features to select: 100
+94.6 0.8 0.90 
+91.9 1.5 0.75 
+79.3 3.0 0.50 
+26.6 100.0 0.04 
+
+
+
+
+regions           : ../data/classification/top_locs_50.txt
+classificator     : SVM
+feature weighting : IG
+model             : log_multinomial
+authors number    : 100
+features to select: 200
+94.9 0.8 0.90 
+90.5 1.5 0.75 
+89.0 3.3 0.50 
+27.9 100.0 0.04 
+
+
+
+
+regions           : ../data/classification/top_locs_50.txt
+classificator     : SVM
+feature weighting : IG
+model             : log_multinomial
+authors number    : 500
+features to select: 100
+81.5 0.8 0.90 
+73.5 1.7 0.75 
+47.8 3.6 0.50 
+31.4 100.0 0.04 
+
+
+
+
+regions           : ../data/classification/top_locs_50.txt
+classificator     : SVM
+feature weighting : IG
+model             : log_multinomial
+authors number    : 500
+features to select: 200
+80.0 1.1 0.90 
+53.0 2.1 0.75 
+40.0 4.5 0.50 
+28.6 100.0 0.04 
+
+
+
+
+regions           : ../data/classification/top_locs_50.txt
+classificator     : SVM
+feature weighting : ambiguity
+model             : multivariate
+authors number    : 100
+features to select: 100
+nan 0.4 0.90 
+83.7 1.1 0.75 
+76.1 1.8 0.50 
+32.4 100.0 0.04 
+
+
+
+
+regions           : ../data/classification/top_locs_50.txt
+classificator     : SVM
+feature weighting : ambiguity
+model             : multivariate
+authors number    : 100
+features to select: 200
+nan 0.4 0.90 
+98.0 0.9 0.75 
+78.8 2.5 0.50 
+28.5 100.0 0.05 
+
+
+
+
+regions           : ../data/classification/top_locs_50.txt
+classificator     : SVM
+feature weighting : ambiguity
+model             : multivariate
+authors number    : 500
+features to select: 100
+nan 0.0 0.90 
+nan 0.1 0.75 
+52.0 1.3 0.50 
+25.4 100.0 0.03 
+
+
+
+
+regions           : ../data/classification/top_locs_50.txt
+classificator     : SVM
+feature weighting : ambiguity
+model             : multivariate
+authors number    : 500
+features to select: 200
+nan 0.2 0.90 
+76.6 0.5 0.75 
+73.9 1.4 0.50 
+30.7 100.0 0.04 
+
+
+
+
+regions           : ../data/classification/top_locs_50.txt
+classificator     : SVM
+feature weighting : ambiguity
+model             : log_multinomial
+authors number    : 100
+features to select: 100
+87.4 0.7 0.90 
+82.2 1.0 0.75 
+82.2 2.0 0.50 
+30.4 100.0 0.03 
+
+
+
+
+regions           : ../data/classification/top_locs_50.txt
+classificator     : SVM
+feature weighting : ambiguity
+model             : log_multinomial
+authors number    : 100
+features to select: 200
+92.0 0.9 0.90 
+88.6 1.6 0.75 
+78.1 3.7 0.50 
+31.0 100.0 0.04 
+
+
+
+
+regions           : ../data/classification/top_locs_50.txt
+classificator     : SVM
+feature weighting : ambiguity
+model             : log_multinomial
+authors number    : 500
+features to select: 100
+70.1 0.3 0.90 
+64.7 0.6 0.75 
+62.9 0.8 0.50 
+24.7 100.0 0.03 
+
+
+
+
+regions           : ../data/classification/top_locs_50.txt
+classificator     : SVM
+feature weighting : ambiguity
+model             : log_multinomial
+authors number    : 500
+features to select: 200
+77.5 0.4 0.90 
+70.0 0.9 0.75 
+46.1 2.2 0.50 
+30.7 100.0 0.03 
+
+
+
+
+regions           : ../data/classification/top_locs_50.txt
+classificator     : SVM
+feature weighting : none
+model             : multivariate
+authors number    : 100
+features to select: 100
+nan 0.4 0.90 
+100.0 1.2 0.75 
+78.9 2.9 0.50 
+29.1 100.0 0.05 
+
+
+
+
+regions           : ../data/classification/top_locs_50.txt
+classificator     : SVM
+feature weighting : none
+model             : multivariate
+authors number    : 100
+features to select: 200
+nan 0.5 0.90 
+100.0 1.0 0.75 
+79.1 3.0 0.50 
+28.9 100.0 0.05 
+
+
+
+
+regions           : ../data/classification/top_locs_50.txt
+classificator     : SVM
+feature weighting : none
+model             : multivariate
+authors number    : 500
+features to select: 100
+80.8 1.0 0.90 
+62.5 2.2 0.75 
+46.8 4.6 0.50 
+26.7 100.0 0.05 
+
+
+
+
+regions           : ../data/classification/top_locs_50.txt
+classificator     : SVM
+feature weighting : none
+model             : multivariate
+authors number    : 500
+features to select: 200
+65.2 1.0 0.90 
+62.2 2.2 0.75 
+46.8 4.6 0.50 
+26.8 100.0 0.05 
+
+
+
+
+regions           : ../data/classification/top_locs_50.txt
+classificator     : SVM
+feature weighting : none
+model             : log_multinomial
+authors number    : 100
+features to select: 100
+98.0 0.7 0.90 
+95.5 1.5 0.75 
+84.6 3.5 0.50 
+28.2 100.0 0.04 
+
+
+
+
+regions           : ../data/classification/top_locs_50.txt
+classificator     : SVM
+feature weighting : none
+model             : log_multinomial
+authors number    : 100
+features to select: 200
+98.0 0.7 0.90 
+95.1 1.5 0.75 
+82.9 3.6 0.50 
+28.2 100.0 0.04 
+
+
+
+
+regions           : ../data/classification/top_locs_50.txt
+classificator     : SVM
+feature weighting : none
+model             : log_multinomial
+authors number    : 500
+features to select: 100
+61.0 1.2 0.90 
+53.8 2.4 0.75 
+43.6 4.9 0.50 
+25.7 100.0 0.04 
+
+
+
+
+regions           : ../data/classification/top_locs_50.txt
+classificator     : SVM
+feature weighting : none
+model             : log_multinomial
+authors number    : 500
+features to select: 200
+61.3 1.2 0.90 
+58.7 2.4 0.75 
+43.8 4.9 0.50 
+25.7 100.0 0.04 
+
+
+
+

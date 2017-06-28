@@ -1,87 +1,87 @@
-Khanty-Mansiyskiy Avtonomnyy Okrug-Yugra: 166
-Respublika Mariy-El: 82
-Perm Krai: 662
-Sverdlovskaya Oblast’: 1385
-Leningradskaya Oblast’: 6660
-Kirovskaya Oblast’: 221
-Tverskaya Oblast’: 237
-Ryazanskaya Oblast’: 158
-Komi: 98
-Ulyanovsk Oblast: 243
-Vologodskaya Oblast’: 195
-Orenburgskaya Oblast’: 178
-Respublika Kareliya: 99
-Krasnodarskiy Kray: 664
-Bashkortostan: 611
-Yamalo-Nenetskiy Avtonomnyy Okrug: 44
-Irkutskaya Oblast’: 641
-Kabardino-Balkarskaya Respublika: 17
-Kamtchatski Kray: 59
-Yevreyskaya Avtonomnaya Oblast’: 20
-Novosibirskaya Oblast’: 1344
-Respublika Buryatiya: 54
-Lipetskaya Oblast’: 119
-Khabarovskiy Kray: 302
-Tul’skaya Oblast’: 200
-Kurganskaya Oblast’: 69
-Republic of Estonia: 324
-Voronezhskaya Oblast’: 370
-Omskaya Oblast’: 373
-Nizhegorodskaya Oblast’: 674
-North Ossetia: 28
-Stavropol’skiy Kray: 185
-Sakhalinskaya Oblast’: 79
-Vladimirskaya Oblast’: 150
-Chukotskiy Avtonomnyy Okrug: 23
-Amurskaya Oblast’: 49
-Novgorodskaya Oblast’: 149
-Sankt-Peterburg: 32
-Astrakhanskaya Oblast’: 214
-Yaroslavskaya Oblast’: 258
-Dagestan: 68
-Zabaykal’skiy Kray: 8
-Volgogradskaya Oblast’: 352
-Tomskaya Oblast’: 324
-Kurskaya Oblast’: 82
-Rostovskaya Oblast’: 693
-Republic of Kazakhstan: 335
-Chelyabinskaya Oblast’: 723
-Bryanskaya Oblast’: 102
-Udmurtskaya Respublika: 226
-Respublika Altay: 16
-Primorskiy Kray: 515
-Arkhangel’skaya Oblast’: 161
-Kalmykiya: 3
-Krasnoyarskiy Kray: 643
-Murmanskaya Oblast’: 165
-Respublika Ingushetiya: 24
-Ukraine: 8984
-Respublika Adygeya: 22
-Republic of Moldova: 156
-Magadanskaya Oblast’: 31
-Smolenskaya Oblast’: 96
-Tambovskaya Oblast’: 93
-Kostromskaya Oblast’: 62
-Penzenskaya Oblast’: 144
-Tyumenskaya Oblast’: 315
-Ivanovskaya Oblast’: 99
-Republic of Belarus: 2051
-Kaluzhskaya Oblast’: 142
-Kemerovskaya Oblast’: 247
-Tatarstan: 625
-Respublika Mordoviya: 45
-Respublika Khakasiya: 59
-Saratovskaya Oblast’: 344
-Orlovskaya Oblast’: 99
-Karachayevo-Cherkesiya: 12
-Respublika Tyva: 9
-Chechenskaya Respublika: 25
-Respublika Sakha (Yakutiya): 38
-Altayskiy Kray: 280
-Samarskaya Oblast’: 917
-Chuvashskaya Respublika: 129
-Moscow Oblast: 21542
-Belgorodskaya Oblast’: 150
-Kaliningradskaya Oblast’: 326
-Pskovskaya Oblast’: 99
-Nenetskiy Avtonomnyy Okrug: 17
+1: Kalmykiya: 3
+2: Zabaykal’skiy Kray: 8
+3: Respublika Tyva: 9
+4: Karachayevo-Cherkesiya: 12
+5: Respublika Altay: 16
+6: Kabardino-Balkarskaya Respublika: 17
+7: Nenetskiy Avtonomnyy Okrug: 17
+8: Yevreyskaya Avtonomnaya Oblast’: 20
+9: Respublika Adygeya: 22
+10: Chukotskiy Avtonomnyy Okrug: 23
+11: Respublika Ingushetiya: 24
+12: Chechenskaya Respublika: 25
+13: North Ossetia: 28
+14: Magadanskaya Oblast’: 31
+15: Sankt-Peterburg: 32
+16: Respublika Sakha (Yakutiya): 38
+17: Yamalo-Nenetskiy Avtonomnyy Okrug: 44
+18: Respublika Mordoviya: 45
+19: Amurskaya Oblast’: 49
+20: Respublika Buryatiya: 54
+21: Kamtchatski Kray: 59
+22: Respublika Khakasiya: 59
+23: Kostromskaya Oblast’: 62
+24: Dagestan: 68
+25: Kurganskaya Oblast’: 69
+26: Sakhalinskaya Oblast’: 79
+27: Kurskaya Oblast’: 82
+28: Respublika Mariy-El: 82
+29: Tambovskaya Oblast’: 93
+30: Smolenskaya Oblast’: 96
+31: Komi: 98
+32: Ivanovskaya Oblast’: 99
+33: Pskovskaya Oblast’: 99
+34: Respublika Kareliya: 99
+35: Orlovskaya Oblast’: 99
+36: Bryanskaya Oblast’: 102
+37: Lipetskaya Oblast’: 119
+38: Chuvashskaya Respublika: 129
+39: Kaluzhskaya Oblast’: 142
+40: Penzenskaya Oblast’: 144
+41: Novgorodskaya Oblast’: 149
+42: Vladimirskaya Oblast’: 150
+43: Belgorodskaya Oblast’: 150
+44: Republic of Moldova: 156
+45: Ryazanskaya Oblast’: 158
+46: Arkhangel’skaya Oblast’: 161
+47: Murmanskaya Oblast’: 165
+48: Khanty-Mansiyskiy Avtonomnyy Okrug-Yugra: 166
+49: Orenburgskaya Oblast’: 178
+50: Stavropol’skiy Kray: 185
+51: Vologodskaya Oblast’: 195
+52: Tul’skaya Oblast’: 200
+53: Astrakhanskaya Oblast’: 214
+54: Kirovskaya Oblast’: 221
+55: Udmurtskaya Respublika: 226
+56: Tverskaya Oblast’: 237
+57: Ulyanovsk Oblast: 243
+58: Kemerovskaya Oblast’: 247
+59: Yaroslavskaya Oblast’: 258
+60: Altayskiy Kray: 280
+61: Khabarovskiy Kray: 302
+62: Tyumenskaya Oblast’: 315
+63: Republic of Estonia: 324
+64: Tomskaya Oblast’: 324
+65: Kaliningradskaya Oblast’: 326
+66: Republic of Kazakhstan: 335
+67: Saratovskaya Oblast’: 344
+68: Volgogradskaya Oblast’: 352
+69: Voronezhskaya Oblast’: 370
+70: Omskaya Oblast’: 373
+71: Primorskiy Kray: 515
+72: Bashkortostan: 611
+73: Tatarstan: 625
+74: Irkutskaya Oblast’: 641
+75: Krasnoyarskiy Kray: 643
+76: Perm Krai: 662
+77: Krasnodarskiy Kray: 664
+78: Nizhegorodskaya Oblast’: 674
+79: Rostovskaya Oblast’: 693
+80: Chelyabinskaya Oblast’: 723
+81: Samarskaya Oblast’: 917
+82: Novosibirskaya Oblast’: 1344
+83: Sverdlovskaya Oblast’: 1385
+84: Republic of Belarus: 2051
+85: Leningradskaya Oblast’: 6660
+86: Ukraine: 8984
+87: Moscow Oblast: 21542
