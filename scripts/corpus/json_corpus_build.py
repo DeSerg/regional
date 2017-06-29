@@ -41,6 +41,8 @@ def parse_line(line_num, line, locations_map, regional_dict, corpus_for_classifi
     author_location = locations_map[max_loc]
     if not lh.RegionKey in author_location and not lh.CountryKey in author_location:
         return
+    if lh.CityKey in author_location:
+        author_data[lh.CityKey] = author_location[lh.CityKey]
     if lh.RegionKey in author_location:
         author_data[lh.RegionKey] = author_location[lh.RegionKey]
     if lh.CountryKey in author_location:
@@ -49,9 +51,8 @@ def parse_line(line_num, line, locations_map, regional_dict, corpus_for_classifi
     # Text
     texts = lh.corpus_text_re.findall(line)
     texts = [re.sub(lh.xml_re, '', text) for text in texts]
-    if sum([len(text) for text in texts]) < ch.MinTextLen:
-        return
 
+    author_data[lh.TextsLenKey] = sum([len(text) for text in texts])
     author_data[lh.NegativeTextsNumKey], author_data[lh.PositiveTextsKey] = ch.count_regional_words(texts, regional_dict)
 
     corpus_for_classification[author_login] = author_data
