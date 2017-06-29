@@ -1,0 +1,243 @@
+Authors with mapped location (only country): 145245
+Federal Republic of Yugoslavia: 29
+România: 113
+Islamic Republic of Pakistan: 83
+Kingdom of Lesotho: 11
+Bangladesh: 46
+Republic of Niger: 14
+Republic of France: 801
+Republic of Chile: 67
+Czechoslovakia: 29
+Republic of Mozambique: 13
+Islamic Republic of Mauritania: 2
+Republic of Equatorial Guinea: 6
+Turks and Caicos Islands: 10
+Polynésie Française: 24
+Nauru: 17
+Cook Islands: 21
+Federal Republic of Germany: 2320
+Republic of Poland: 435
+Republic of Côte d’Ivoire: 25
+Union of Burma: 13
+Dominican Republic: 36
+Republic of Chad: 10
+Republic of Guatemala: 20
+Independent State of Papua New Guinea: 100
+Republic of Fiji: 78
+Democratic Republic of Timor-Leste: 31
+Kingdom of Sweden: 392
+Kingdom of Morocco: 33
+Kingdom of Swaziland: 28
+Republic of Armenia: 187
+German Democratic Republic: 1
+Republic of the Philippines: 486
+Republic of Turkey: 253
+Republic of Vanuatu: 43
+Guyane: 4
+Somalia: 19
+Cayman Islands: 15
+Jamaica: 95
+Democratic Republic of the Congo: 21
+Saint-Pierre et Miquelon: 15
+Republic of Cyprus: 76
+Palestine: 29
+Territory of Heard Island and McDonald Islands: 33
+Independent State of Samoa: 25
+Republic of Iceland: 111
+Commonwealth of Australia: 973
+Principality of Andorra: 35
+Saint Lucia: 22
+Serbia: 35
+Co-operative Republic of Guyana: 5
+Kingdom of Tonga: 15
+Republic of Lithuania: 256
+Republic of Ecuador: 39
+Bailiwick of Jersey: 4
+British Virgin Islands: 27
+Islamic Republic of Iran: 20
+Republic of the Sudan: 17
+State of Israel: 3693
+Kingdom of Denmark: 152
+Nouvelle-Calédonie: 11
+Republic of Malta: 39
+Saint Vincent and the Grenadines: 29
+Grand Duchy of Luxembourg: 52
+Commonwealth of The Bahamas: 36
+Republic of Uzbekistan: 204
+Aruba: 32
+Ahvenanmaan Lääni: 23
+Greenland: 20
+Republic of Mali: 6
+Canada: 1974
+Republic of Haiti: 23
+Republic of Kiribati: 18
+Republic of Mauritius: 11
+Libya: 11
+Union of the Comoros: 8
+Tuvalu: 34
+Solomon Islands: 33
+Federative Republic of Brazil: 290
+Mongolia: 62
+Republic of Guinea: 1
+Republic of Uganda: 50
+Malaysia: 198
+Plurinational State of Bolivia: 31
+Kingdom of Belgium: 224
+Republic of Indonesia: 227
+Kingdom of Bhutan: 20
+Commonwealth of the Northern Mariana Islands: 25
+Republic of Paraguay: 34
+Netherlands Antilles: 5
+Republic of Djibouti: 34
+People’s Democratic Republic of Algeria: 34
+Republic of Moldova: 416
+Turkmenistan: 24
+Arab Republic of Egypt: 91
+Antigua and Barbuda: 64
+Republic of Sierra Leone: 17
+Democratic Socialist Republic of Sri Lanka: 32
+Kingdom of Spain: 411
+Federal Republic of Nigeria: 27
+Republic of Estonia: 738
+Republic of Yemen: 28
+Republic of Suriname: 13
+Republic of Slovenia: 41
+Republic of Zambia: 24
+Ireland: 228
+Republic of Albania: 221
+Kyrgyz Republic: 86
+Kingdom of Saudi Arabia: 51
+Czechia: 301
+Republic of Benin: 14
+Territory of Cocos (Keeling) Islands: 64
+Republic of Latvia: 678
+Hong Kong Special Administrative Region: 89
+Federated States of Micronesia: 14
+Macau Special Administrative Region: 5
+Bosnia and Herzegovina: 31
+Ukraine: 17693
+Kingdom of Norway: 334
+Territory of the French Southern and Antarctic Lands: 353
+People’s Republic of China: 180
+Bolivarian Republic of Venezuela: 50
+Mexico: 275
+Republic of South Africa: 48
+Kingdom of Bahrain: 25
+Dominica: 7
+Faroe Islands: 14
+Bermuda: 65
+Republic of Cabo Verde: 21
+Republic of Senegal: 27
+Federation of Saint Kitts and Nevis: 29
+Republic of Finland: 793
+Barbados: 76
+Brunei Darussalam: 18
+Republic of Nicaragua: 14
+Republic of Bulgaria: 172
+Hungary: 85
+Republic of India: 337
+Republic of Honduras: 176
+Republic of Panama: 38
+Hellenic Republic: 116
+South Georgia and the South Sandwich Islands: 41
+Slovak Republic: 45
+Montserrat: 1
+Falkland Islands (Islas Malvinas): 12
+Portuguese Republic: 138
+Republic of Angola: 19
+Isle of Man: 24
+Republic of Singapore: 2491
+Hashemite Kingdom of Jordan: 18
+Kingdom of Cambodia: 45
+Republic of Tajikistan: 27
+Union of Soviet Socialist Republics: 20
+Kingdom of the Netherlands: 541
+Syrian Arab Republic: 16
+Togolese Republic: 29
+United Republic of Tanzania: 25
+Republic of Korea: 120
+Reunion: 28
+Republic of Cuba: 99
+Republic of Croatia: 28
+State of the Vatican City: 100
+Argentine Republic: 120
+Territory of Norfolk Island: 65
+Federal Democratic Republic of Ethiopia: 31
+Mayotte: 6
+Burkina Faso: 64
+Republic of Seychelles: 27
+British Indian Ocean Territory: 21
+Republic of Belarus: 4153
+Territory of Christmas Island: 80
+Republic of Azerbaijan: 162
+Republic of Colombia: 51
+Gabonese Republic: 21
+Montenegro: 40
+Virgin Islands of the United States: 27
+New Zealand: 254
+Guadeloupe: 22
+Belize: 20
+State of Qatar: 36
+Republic of Kazakhstan: 344
+Niue: 16
+Tokelau: 22
+Republic of Burundi: 16
+Repubblica Italiana: 602
+Georgia: 116
+Republic of Malawi: 3
+Bouvet Island: 17
+Lao People’s Democratic Republic: 16
+Guam: 13
+Republic of Zimbabwe: 364
+Republic of Macedonia: 18
+Saint Helena, Ascension, and Tristan da Cunha: 43
+State of Eritrea: 7
+Republic of Tunisia: 20
+Puerto Rico: 62
+Islamic Republic of Afghanistan: 112
+Republic of El Salvador: 25
+Taiwan: 62
+Republic of Guinea-Bissau: 9
+Democratic People’s Republic of Korea: 22
+State of Kuwait: 24
+United States Minor Outlying Islands: 26
+Republic of Liberia: 8
+Japan: 517
+Switzerland: 240
+Martinique: 10
+United States: 10860
+Republic of Costa Rica: 19
+Republic of Palau: 18
+Republic of the Marshall Islands: 12
+United Arab Emirates: 117
+Republic of Namibia: 12
+Gibraltar: 14
+Lebanon: 24
+Repubblica di San Marino: 23
+Grenada: 8
+Republic of Botswana: 45
+Anguilla: 14
+Republic of Iraq: 18
+Kingdom of Thailand: 386
+Republic of Cameroon: 6
+Republic of Madagascar: 59
+Pitcairn, Henderson, Ducie and Oeno Islands: 20
+Republic of Rwanda: 48
+Socialist Republic of Vietnam: 274
+Bailiwick of Guernsey: 4
+Sultanate of Oman: 27
+Central African Republic: 6
+Republic of Peru: 97
+Republic of Trinidad and Tobago: 87
+Sao Tome and Principe: 16
+Republic of Ghana: 13
+Republic of Kenya: 15
+Federal Democratic Republic of Nepal: 53
+Russian Federation: 80852
+Principality of Liechtenstein: 17
+Gambia: 6
+Oriental Republic of Uruguay: 41
+Wallis et Futuna: 33
+Republic of Maldives: 32
+Principality of Monaco: 38
+Republic of Austria: 164
