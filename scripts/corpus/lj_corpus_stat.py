@@ -178,7 +178,7 @@ def region_stat():
 
                 ch.print_progress(line_num, total_num_lines, corpus_filename, filename_num)
 
-    print('\n\n%d\n\n' % authors_with_region)
+    print('\n\nNumber of authors with location: %d\n\n' % authors_with_region)
 
 
 # number of authors, texts, texts with regional words in countries
@@ -236,7 +236,8 @@ def main(argv):
 
     out_filename = argv[3]
 
-    mapped_region_stat_regional(locations_map, regional_dict, regions, countries, out_filename)
+    region_stat()
+    # mapped_region_stat_regional(locations_map, regional_dict, regions, countries, out_filename)
 
 
 if __name__ == "__main__":
