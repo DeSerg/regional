@@ -41,6 +41,9 @@ def extract_data_from_line(line, locations_map):
             author_location = locations_map[loc]
             break
 
+    if not author_location:
+        return FailVal
+
     # Text
     texts = lh.corpus_text_re.findall(line)
     texts = [re.sub(lh.xml_re, '', text) for text in texts]
