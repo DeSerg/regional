@@ -8,6 +8,8 @@ CountryKey = 'country'
 NegativeTextsNumKey = 'negative texts num'
 PositiveTextsKey = 'positive texts'
 
+TextsLenKey = 'texts length'
+
 RussiaName = 'Russian Federation'
 
 corpus_loc_re = re.compile('attr_\d+_Location="(.*?)"')
