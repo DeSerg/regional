@@ -173,6 +173,7 @@ def region_stat():
     print('\n\nNumber of authors with location: %d\n\n' % authors_with_region)
 
 
+
 # number of authors, texts, texts with regional words in countries
 def mapped_country_region_stat_regional(locations_map, regional_dict, out_filename):
 
@@ -211,6 +212,41 @@ def mapped_country_region_stat_regional(locations_map, regional_dict, out_filena
             out_f.write('%s: %s, %f\n' % (country, authors_num, regional_words_num / authors_num))
 
 
+# number of authors in locations with countries only
+def mapped_country_only_stat(locations_map):
+
+    countries = {} # authors_num, regional_words_num
+    authors_mapped = 0
+
+    for filename_num, (corpus_filename, total_num_lines) in enumerate(ch.CorpusFiles):
+        with open(corpus_filename) as corpus_f:
+            for line_num, line in enumerate(corpus_f):
+                success, login, location, texts = ch.extract_data_from_line(line, locations_map)
+                if not success:
+                    continue
+                if (lh.CityKey not in location) and (lh.RegionKey not in location) and (lh.CountryKey in location):
+                    country = location[lh.CountryKey]
+                    if not country in countries:
+                        countries[country] = [1]
+                    else:
+                        countries[country] += 1
+
+                    authors_mapped += 1
+
+                ch.print_progress(line_num, total_num_lines, corpus_filename, filename_num)
+
+    check_sum = 0
+    for country, num in countries.items():
+        check_sum += num
+
+    if check_sum != authors_mapped:
+        print('fail: authors_mapped = %d, check_sum = %d' % (authors_mapped, check_sum))
+
+    print('Authors with mapped location (only country): %d' % authors_mapped)
+    for country, num in countries.items():
+        print('%s: %d' % (country, num))
+
+
 def main(argv):
     if len(argv) < 4:
         print('Usage: script.py locations_map.json regional_dict.xlsx locations_file.txt out_file')
@@ -228,7 +264,7 @@ def main(argv):
 
     out_filename = argv[3]
 
-    mapped_locations_stat(locations_map)
+    mapped_country_only_stat(locations_map)
     # mapped_region_stat_regional(locations_map, regional_dict, regions, countries, out_filename)
 
 
