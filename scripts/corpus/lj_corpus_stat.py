@@ -227,7 +227,7 @@ def mapped_country_only_stat(locations_map):
                 if (lh.CityKey not in location) and (lh.RegionKey not in location) and (lh.CountryKey in location):
                     country = location[lh.CountryKey]
                     if not country in countries:
-                        countries[country] = [1]
+                        countries[country] = 1
                     else:
                         countries[country] += 1
 
