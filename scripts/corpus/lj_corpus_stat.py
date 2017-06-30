@@ -21,7 +21,10 @@ def mapped_locations_toponims_utf8_stat(toponims_utf8_filename):
         locs_map.add(author_loc)
 
     print(len(locs_map))
-    print(locs_map[:40])
+    for ind, loc in enumerate(locs_map):
+        if ind > 100:
+            break
+        print(loc)
 
     authors_mapped = 0
     for filename_num, (corpus_filename, total_num_lines) in enumerate(ch.CorpusFiles):
