@@ -1,6 +1,7 @@
 import sys
 import json
 import re
+import pandas as pd
 from xml.etree import cElementTree as ET
 
 sys.path.insert(0, '..')
@@ -8,6 +9,38 @@ sys.path.insert(0, '..')
 import regional_dict.regional_dict_helper as rdh
 import location_utils.location_helper as lh
 import corpus.corpus_helper as ch
+
+
+def mapped_locations_toponims_utf8_stat(toponims_utf8_filename):
+    df = pd.read_csv(toponims_utf8_filename, '\t')
+
+    locs_map = set()
+    for _, record in df.iterrows():
+        author_loc = record[['author_name']].to_string(index=False, header=False, na_rep='')
+        locs_map.add(author_loc)
+
+    authors_mapped = 0
+    for filename_num, (corpus_filename, total_num_lines) in enumerate(ch.CorpusFiles):
+        with open(corpus_filename) as corpus_f:
+            for line_num, line in enumerate(corpus_f):
+
+                success, locs_set = ch.extract_raw_locs_from_line(line)
+                if not success:
+                    continue
+
+                found = False
+                for loc in locs_set:
+                    loc_split = loc.split(lh.ToponimSeparator)
+                    for toponim in loc_split:
+                        if toponim in locs_map:
+                            found = True
+
+                if found:
+                    authors_mapped += 1
+
+                ch.print_progress(line_num, total_num_lines, corpus_filename, filename_num)
+
+    print('\n\nAuthors with toponmis-utf8 mapped location: %d\n\n' % authors_mapped)
 
 
 # number of authors with location which was successfully mapped by standartificator
@@ -26,6 +59,7 @@ def mapped_locations_stat(locations_map):
                 ch.print_progress(line_num, total_num_lines, corpus_filename, filename_num)
 
     print('Authors with mapped location: %d' % authors_mapped)
+
 
 def mapped_locations_stat_country_only(locations_map, regions_filename):
     with open(locations_map_filename) as locations_map_f:
@@ -64,6 +98,7 @@ def mapped_locations_stat_country_only(locations_map, regions_filename):
     print('Authors with region: %d' % authors_mapped)
     for loc, num in locs_map_out.items():
         print('%s: %d' % (loc, num))
+
 
 def mapped_locations_stat_certain(locations_map_filename, regions, countries):
 
@@ -173,7 +208,6 @@ def region_stat():
     print('\n\nNumber of authors with location: %d\n\n' % authors_with_region)
 
 
-
 # number of authors, texts, texts with regional words in countries
 def mapped_country_region_stat_regional(locations_map, regional_dict, out_filename):
 
@@ -248,23 +282,42 @@ def mapped_country_only_stat(locations_map):
 
 
 def main(argv):
-    if len(argv) < 4:
-        print('Usage: script.py locations_map.json regional_dict.xlsx locations_file.txt out_file')
+    if len(argv) < 1:
+        print('Usage: script.py stat_method locations_map.json regional_dict.xlsx locations_file.txt out_file')
         return
 
-    location_map_filename = argv[0]
-    locations_map = lh.load_locations_map(location_map_filename)
+    stat_method = argv[0]
 
-    regional_dict_filename = argv[1]
-    rw = rdh.RegionalWords(regional_dict_filename)
-    regional_dict = rw.word_forms()
+    if stat_method == 'mapped_locs_toponims_utf8':
+        if len(argv) < 2:
+            print('Usage: script.py mapped_locations_stat toponims-utf8.txt')
+            return
 
-    locations_filename = argv[2]
-    regions, countries = lh.parse_classification_locations(locations_filename)
+        mapped_locations_toponims_utf8_stat(argv[1])
 
-    out_filename = argv[3]
+    elif stat_method == 'mapped_locs':
+        if len(argv) < 2:
+            print('Usage: script.py mapped_locations_stat locations_map.json')
+            return
 
-    mapped_country_only_stat(locations_map)
+        location_map_filename = argv[1]
+        locations_map = lh.load_locations_map(location_map_filename)
+
+        mapped_locations_stat(locations_map)
+
+    # location_map_filename = argv[0]
+    # locations_map = lh.load_locations_map(location_map_filename)
+    #
+    # regional_dict_filename = argv[1]
+    # rw = rdh.RegionalWords(regional_dict_filename)
+    # regional_dict = rw.word_forms()
+    #
+    # locations_filename = argv[2]
+    # regions, countries = lh.parse_classification_locations(locations_filename)
+    #
+    # out_filename = argv[3]
+    #
+    # mapped_country_only_stat(locations_map)
     # mapped_region_stat_regional(locations_map, regional_dict, regions, countries, out_filename)
 
 

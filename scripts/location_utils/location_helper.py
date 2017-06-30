@@ -16,6 +16,8 @@ corpus_loc_re = re.compile('attr_\d+_Location="(.*?)"')
 corpus_text_re = re.compile('<text>(.*?)</text>')
 xml_re = re.compile('(<\w+>)|(</\w+>)|(<\w+/>)')
 
+ToponimSeparator = ';'
+
 # " city , region  ,  country" => "city,region,country"
 def extract_location(location):
     loc = location.split(',')
@@ -24,7 +26,7 @@ def extract_location(location):
         return ''
 
     loc = [s.strip() for s in loc]
-    return ';'.join(loc)
+    return ToponimSeparator.join(loc)
 
 
 def parse_classification_locations(locations_filename):
