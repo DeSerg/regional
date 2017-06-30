@@ -15,6 +15,28 @@ CorpusFiles = [
 MinTextLen = 5000
 
 
+def extract_raw_locs_from_line(line):
+
+    FailVal = (False, set())
+
+    line_split = line.split(' ', 1)
+    if len(line_split) != 2:
+        print('Line without author?\n%s\n' % line)
+        return FailVal
+
+    author_login, data = line_split[0], line_split[1]
+
+    # Location
+    locations = lh.corpus_loc_re.findall(data)
+    locations = [lh.extract_location(loc) for loc in locations]
+
+    if not locations:
+        return FailVal
+    locs_set = set(locations)
+
+    return locs_set
+
+
 def extract_data_from_line(line, locations_map):
 
     FailVal = (False, '', '', '')
