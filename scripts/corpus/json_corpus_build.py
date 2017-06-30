@@ -22,21 +22,21 @@ def parse_line(line_num, line, locations_map, regional_dict, corpus_for_classifi
     locations = lh.corpus_loc_re.findall(data)
     locations = [lh.extract_location(loc) for loc in locations]
 
-    if map_loc and not locations:
-        return
-
-    loc_set = set(locations)
-    max_loc = locations[0]
-    max_count = locations.count(locations[0])
-    for location in loc_set:
-        count = locations.count(location)
-        if count > max_count:
-            max_loc = location
-            max_count = count
-
     author_data = {}
 
     if map_loc:
+        if not locations:
+            return
+
+        loc_set = set(locations)
+        max_loc = locations[0]
+        max_count = locations.count(locations[0])
+        for location in loc_set:
+            count = locations.count(location)
+            if count > max_count:
+                max_loc = location
+                max_count = count
+
         if not max_loc in locations_map:
             return
 
@@ -51,8 +51,6 @@ def parse_line(line_num, line, locations_map, regional_dict, corpus_for_classifi
         if lh.CountryKey in author_location:
             author_data[lh.CountryKey] = author_location[lh.CountryKey]
 
-    else:
-        author_data[lh.LocationKey] = max_loc
 
     # Text
     texts = lh.corpus_text_re.findall(line)
