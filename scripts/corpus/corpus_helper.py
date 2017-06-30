@@ -34,7 +34,7 @@ def extract_raw_locs_from_line(line):
         return FailVal
     locs_set = set(locations)
 
-    return locs_set
+    return True, locs_set
 
 
 def extract_data_from_line(line, locations_map):
