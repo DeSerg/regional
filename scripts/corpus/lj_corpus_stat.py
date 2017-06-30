@@ -16,7 +16,8 @@ def mapped_locations_toponims_utf8_stat(toponims_utf8_filename):
 
     locs_map = set()
     for _, record in df.iterrows():
-        author_loc = record[['author_name']].to_string(index=False, header=False, na_rep='')
+        # author_loc = record[['author_name']].to_string(index=False, header=False, na_rep='') for pandas 0.18
+        author_loc = record[['author_name']].str
         locs_map.add(author_loc)
 
     authors_mapped = 0
