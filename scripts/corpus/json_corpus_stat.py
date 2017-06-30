@@ -285,8 +285,8 @@ def main(argv):
         class_corp = json.load(json_file)
 
     # regions_for_country(class_corp, 'Republic of Kazakhstan')
-    # regions_for_country(class_corp, lh.RussiaName)
-    general_stat(class_corp)
+    regions_for_country(class_corp, lh.RussiaName)
+    # general_stat(class_corp)
 
 
 
