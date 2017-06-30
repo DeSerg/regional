@@ -177,7 +177,7 @@ def region_stat():
 # number of authors, texts, texts with regional words in countries
 def mapped_country_region_stat_regional(locations_map, regional_dict, out_filename):
 
-    countries = {} # authors_num, regional_words_num
+    countries = {} # authors_num, regional_texts_num
 
     for filename_num, (corpus_filename, total_num_lines) in enumerate(ch.CorpusFiles):
         with open(corpus_filename) as corpus_f:
@@ -200,16 +200,16 @@ def mapped_country_region_stat_regional(locations_map, regional_dict, out_filena
     with open(out_filename + '_', 'w') as out_f:
         for country, country_stat in countries.items():
             authors_num = country_stat[0]
-            regional_words_num = country_stat[1]
-            out_f.write('%s: %s, %f\n' % (country, authors_num, regional_words_num / authors_num))
+            regional_texts_num = country_stat[1]
+            out_f.write('%s: %s, %f\n' % (country, authors_num, regional_texts_num / authors_num))
 
     with open(out_filename, 'w') as out_f:
         countries_list = [(country, value) for country, value in countries.items()]
         countries_list.sort(key=lambda x: x[1][0], reverse=True)
         for country, country_stat in countries_list:
             authors_num = country_stat[0]
-            regional_words_num = country_stat[1]
-            out_f.write('%s: %s, %f\n' % (country, authors_num, regional_words_num / authors_num))
+            regional_texts_num = country_stat[1]
+            out_f.write('%s: %s, %f\n' % (country, authors_num, regional_texts_num / authors_num))
 
 
 # number of authors in locations with countries only

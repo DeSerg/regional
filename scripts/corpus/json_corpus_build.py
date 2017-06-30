@@ -72,11 +72,11 @@ def main(argv):
     out_data_filename = argv[3]
 
     corpus_for_classification = {}
-    for corpus_filename, total_num_lines in ch.CorpusFiles:
+    for file_num, (corpus_filename, total_num_lines) in enumerate(ch.CorpusFiles):
         with open(corpus_filename) as corpus_f:
             for line_num, line in enumerate(corpus_f):
                 parse_line(line_num, line, locations_map, regional_dict, corpus_for_classification)
-                ch.print_progress(line_num, total_num_lines, corpus_filename)
+                ch.print_progress(line_num, total_num_lines, corpus_filename, file_num)
 
     with open(out_data_filename, 'w') as out_data_f:
         json.dump(corpus_for_classification, out_data_f, ensure_ascii=False, indent=0)
