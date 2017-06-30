@@ -12,19 +12,15 @@ import corpus.corpus_helper as ch
 
 
 def mapped_locations_toponims_utf8_stat(toponims_utf8_filename):
-    df = pd.read_csv(toponims_utf8_filename, '\t')
+    df = pd.read_csv(toponims_utf8_filename, '\t', index_col=False)
 
     locs_map = set()
     for _, record in df.iterrows():
         # author_loc = record[['author_name']].to_string(index=False, header=False, na_rep='') # for pandas 0.18
-        author_loc = record[['author_name']].to_string(na_rep='')
+        author_loc = record.author
         locs_map.add(author_loc)
 
     print(len(locs_map))
-    for ind, loc in enumerate(locs_map):
-        if ind > 100:
-            break
-        print(loc)
 
     authors_mapped = 0
     for filename_num, (corpus_filename, total_num_lines) in enumerate(ch.CorpusFiles):
