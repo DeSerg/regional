@@ -6,6 +6,7 @@ sys.path.insert(0, '..')
 import location_utils.location_helper as lh
 import standart_locations.region_database as reg_db
 
+
 def stat_old(json_filename):
     class_corp = {}
     with open(json_filename) as json_file:
@@ -111,6 +112,7 @@ def stat_certain_old(class_corp, locs_filename):
     print('Texts with regional words    : %d' % pos_texts_num)
     print('Texts without regional words : %d' % (total_texts_num - pos_texts_num))
 
+
 def stat_certain(class_corp, locs_filename):
 
     regions = ['Moscow Oblast']
@@ -175,6 +177,7 @@ def regions_rus_stat(json_filename):
     for region, authors in regions.items():
         print('%s: %d' % (region, authors))
 
+
 def countries_num(class_corp):
     countries = {}
     for author, data in class_corp.items():
@@ -190,6 +193,7 @@ def countries_num(class_corp):
         print('%s: %d' % (country, num))
         total += num
     print('\ntotal: %d' % total)
+
 
 def regions_for_country(class_corp, country_targ):
     regions = {}
@@ -218,6 +222,60 @@ def regions_for_country(class_corp, country_targ):
     for region, authors_num, reg_authors_num in regions_list:
         print('%s: %d, %d' % (region, authors_num, reg_authors_num))
 
+
+def general_stat(class_corp):
+
+    total_authors_num = len(class_corp)
+    total_texts_num = 0
+    total_texts_len = 0
+
+    city_region_country_num = 0
+    region_country_num = 0
+    country_num = 0
+
+    text_len_border = [20, 300, 500, 1000, 3000, 5000]
+    author_num_for_border = {}
+    for text_len in text_len_border:
+        author_num_for_border[text_len] = 0
+
+    for author, data in class_corp.items():
+        city, region, country = '', '', ''
+        if lh.CityKey in data:
+            city = data[lh.CityKey]
+        if lh.RegionKey in data:
+            region = data[lh.RegionKey]
+        if lh.CountryKey in data:
+            country = data[lh.CountryKey]
+        if city and region and country:
+            city_region_country_num += 1
+        elif region and country:
+            region_country_num += 1
+        elif country:
+            country_num += 1
+
+        text_len = data[lh.TextsLenKey]
+        total_texts_len += text_len
+
+        total_texts_num += len(data[lh.PositiveTextsKey]) + data[lh.NegativeTextsNumKey]
+
+        for text_len_border, value in author_num_for_border.items():
+            if text_len > text_len_border:
+                author_num_for_border[text_len_border] = value + 1
+
+    print('General LJ corpus stat')
+    print()
+    print('Total authors num: %d' % total_authors_num)
+    print('Total_texts_num: %d' % total_texts_num)
+    print('Average texts len: %f' % (total_texts_len / total_texts_num))
+    print()
+    print('Authors with city, region, country: %d' % city_region_country_num)
+    print('Authors with region, country: %d' % region_country_num)
+    print('Authors with country: %d' % country_num)
+    print()
+    for text_len_border, authors_num in author_num_for_border.items():
+        print('Border: %d, authors: %d' % (text_len_border, authors_num))
+
+
 def main(argv):
     json_filename = argv[0]
     regions_filename = argv[1]
@@ -226,8 +284,9 @@ def main(argv):
     with open(json_filename) as json_file:
         class_corp = json.load(json_file)
 
-    regions_for_country(class_corp, 'Republic of Kazakhstan')
-    # regions_for_country(class_corp, lh.RussiaName)
+    # regions_for_country(class_corp, 'Republic of Kazakhstan')
+    regions_for_country(class_corp, lh.RussiaName)
+    # general_stat(class_corp)
 
 
 
