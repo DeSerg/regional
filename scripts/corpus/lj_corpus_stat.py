@@ -20,6 +20,9 @@ def mapped_locations_toponims_utf8_stat(toponims_utf8_filename):
         author_loc = record[['author_name']].str
         locs_map.add(author_loc)
 
+    print(len(locs_map))
+    print(locs_map[:40])
+
     authors_mapped = 0
     for filename_num, (corpus_filename, total_num_lines) in enumerate(ch.CorpusFiles):
         with open(corpus_filename) as corpus_f:
