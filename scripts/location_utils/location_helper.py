@@ -4,6 +4,7 @@ import json
 CityKey = 'city'
 RegionKey = 'region'
 CountryKey = 'country'
+LocationKey = 'loc'
 
 NegativeTextsNumKey = 'negative texts num'
 PositiveTextsKey = 'positive texts'
