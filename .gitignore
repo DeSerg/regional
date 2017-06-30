@@ -8,6 +8,5 @@ data/standart_locations/geonames_data/*
 classification_depr/*
 data/words_small.jsons
 __pycache__
-data/classification/db_lj_corpus.json
 
 !.gitignore
