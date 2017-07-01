@@ -25,6 +25,7 @@ additional_loc_filename = '../data/additional_mapping.csv'
 import regional_dict.regional_dict_helper as rdh
 import regional_dict.regional_json_statistics as rjs
 import location_utils.location_helper as lh
+import corpus.corpus_helper as ch
 from utility import routines as routines
 
 np.set_printoptions(precision=3, suppress=True)
@@ -115,7 +116,7 @@ def prepare_data(classify_mode, process_mode, dict_filename,
 
 
 def prepare_data_db(classify_mode, process_mode, dict_filename,
-                 regions_filename, authors_number, data_filename):
+                 regions_filename, authors_number, min_texts_len, data_filename):
     lemmatizer = rdh.RegionalWords(dict_filename)
 
     # locs_keys = lemmatizer.locs_list()
@@ -136,7 +137,7 @@ def prepare_data_db(classify_mode, process_mode, dict_filename,
         data, y = [], []
     ids = []
 
-    authors = _top_authors(REGIONS_NUMBER, COUNTRIES_NUMBER, json_data, region_map, country_map, authors_number)
+    authors = _top_authors(REGIONS_NUMBER, COUNTRIES_NUMBER, json_data, region_map, country_map, authors_number, min_texts_len)
 
     for i, author in enumerate(authors):
         elem = json_data[author]
@@ -194,11 +195,16 @@ def prepare_data_db(classify_mode, process_mode, dict_filename,
             'region map': region_map, 'lemma codes': lemma_codes}
 
 
-def _top_authors(rn_num, cn_num, json_data, rn_map, cn_map, authors_number):
+def _top_authors(rn_num, cn_num, json_data, rn_map, cn_map, authors_number, min_texts_len):
     loc_num = rn_num + cn_num
     author_indexes_by_loc = [[] for r in range(rn_num + cn_num)]
 
     for i, (author, elem) in enumerate(json_data.items()):
+        if lh.TextsLenKey in elem:
+            texts_len = elem[lh.TextsLenKey]
+            if texts_len < min_texts_len:
+                continue
+
         loc, loc_code, loc_type = _extract_loc(elem, rn_map, cn_map)
         if loc_code is None:
             continue
@@ -616,14 +622,15 @@ def run(args):
 
 def run_parsed(regions_filename, dict_filename, train_json,
                type = 'multivariate', authors_number = 100,
-               feature_weighting ='log_odds', features_to_select = 100, classifier ='NB',
+               feature_weighting ='log_odds', features_to_select = 100,
+               min_texts_len=ch.MinTextLen, classifier ='NB',
                algorithm = 'simple', mode = 'authors', nfolds = 10, local=True, new_corpus=True):
 
     clf = RegionalBayesClassifier(mode=mode, classifier=classifier, algorithm=algorithm, type=type,
                                   alpha=0.1, feature_weighting=feature_weighting, local=local)
 
     if new_corpus:
-        data = prepare_data_db(mode, 'train', dict_filename, regions_filename, authors_number, train_json)
+        data = prepare_data_db(mode, 'train', dict_filename, regions_filename, authors_number, min_texts_len, train_json)
     else:
         data = prepare_data(mode, 'train', dict_filename, regions_filename, authors_number, train_json)
 

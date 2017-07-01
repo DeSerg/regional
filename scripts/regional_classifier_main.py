@@ -6,15 +6,16 @@ def cross_classify():
     # six main tune parameters
     types = ['multivariate', 'log_multinomial'] # + 'multinomial'
     region_filenames = [
-        # '../data/classification/db_locs_main.txt',
+        '../data/classification/db_top_locs_50.txt',
+        '../data/classification/db_locs_main.txt',
+        '../data/classification/db_locs_main_exp.txt'
         # '../data/classification/db_top_locs_10.txt',
         # '../data/classification/db_top_locs_20.txt',
-        # '../data/classification/db_top_locs_50.txt'
-        '../data/classification/db_locs_main_exp.txt'
     ]
     author_nums = [100, 500]
     feature_weightings = ['log_odds', 'IG', 'ambiguity', 'none']  # + 'weight'
     features_to_select_arr = [100, 200]
+    min_texts_len = [300, 1000, 3000]
     classifiers = ['NB', 'logistic', 'SVM'] # + 'sklearn_NB'
 
     # other parameters
@@ -31,7 +32,7 @@ def cross_classify():
                                 region_filename, dict_filename, train_json,
                                 type, author_num,
                                 feature_weighting, features_to_select,
-                                classifier)
+                                min_texts_len, classifier)
                             print('\n\n\n')
 
 

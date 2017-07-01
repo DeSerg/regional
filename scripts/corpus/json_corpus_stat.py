@@ -1,10 +1,12 @@
 import sys
 import json
 import operator
+import matplotlib.pyplot as plt
 sys.path.insert(0, '..')
 
 import location_utils.location_helper as lh
 import standart_locations.region_database as reg_db
+import corpus.corpus_helper as ch
 
 
 def stat_old(json_filename):
@@ -113,20 +115,9 @@ def stat_certain_old(class_corp, locs_filename):
     print('Texts without regional words : %d' % (total_texts_num - pos_texts_num))
 
 
-def stat_certain(class_corp, locs_filename):
+def stat_certain(class_corp, locations_filename, min_texts_len=ch.MinTextLen):
 
-    regions = ['Moscow Oblast']
-    countries = []
-    # with open(locs_filename) as locs_f:
-    #     for line in locs_f:
-    #         line_split = line.strip().split(': ')
-    #         if len(line_split) != 2:
-    #             print('damn')
-    #             continue
-    #         if line_split[0] == lh.RegionKey:
-    #             regions.append(line_split[1])
-    #         else:
-    #             countries.append(line_split[1])
+    regions, countries = lh.parse_classification_locations(locations_filename)
 
     author_num = 0
     total_texts_num = 0
@@ -218,9 +209,25 @@ def regions_for_country(class_corp, country_targ):
             regions[region] = [1, pos_text_flag]
 
     regions_list = [(region, data[0], data[1]) for region, data in regions.items()]
-    regions_list.sort(key=lambda x: x[2])
-    for region, authors_num, reg_authors_num in regions_list:
+    regions_list.sort(key=lambda x: x[1], reverse=True)
+
+    region_ids = []
+    authors_nums = []
+    reg_authors_nums = []
+
+    for region_id, (region, authors_num, reg_authors_num) in enumerate(regions_list, 1):
         print('%s: %d, %d' % (region, authors_num, reg_authors_num))
+        region_ids.append(region_id)
+        authors_nums.append(authors_num)
+        reg_authors_nums.append(reg_authors_num)
+
+    print('Total authors num: %d' % sum(authors_nums))
+    print('Total authors with regional texts num: %d' % sum(reg_authors_nums))
+
+    start = 1
+    plt.plot(region_ids[start:], authors_nums[start:], 'bo', region_ids[start:], reg_authors_nums[start:], 'r^')
+    # plt.plot(region_ids[start:], reg_authors_nums[start:], 'g^')
+    plt.show()
 
 
 def general_stat(class_corp):
@@ -275,19 +282,102 @@ def general_stat(class_corp):
     for text_len_border, authors_num in author_num_for_border.items():
         print('Border: %d, authors: %d' % (text_len_border, authors_num))
 
+# for corpus with texts lengths
+def general_stat_for_locs(class_corp, locations_filename, min_texts_len=ch.MinTextLen):
+
+    regions, countries = lh.parse_classification_locations(locations_filename)
+
+    total_authors_num = 0
+    total_texts_num = 0
+    total_texts_len = 0
+
+    locations_data = {}
+
+    for author, data in class_corp.items():
+        region, country = '', ''
+        if lh.RegionKey in data:
+            region = data[lh.RegionKey]
+        if lh.CountryKey in data:
+            country = data[lh.CountryKey]
+
+        location = ''
+        if region in regions:
+            location = region
+        elif country in countries:
+            location = country
+        else:
+            continue
+
+        total_authors_num += 1
+        
+        texts_len = data[lh.TextsLenKey]
+        total_texts_len += texts_len
+
+        texts_num = len(data[lh.PositiveTextsKey]) + data[lh.NegativeTextsNumKey]
+        total_texts_num += texts_num
+
+        if location in locations_data:
+            locations_data[location][0] += 1 # authors_num
+            locations_data[location][1] += texts_num # texts_num
+            locations_data[location][2] += texts_len # texts_len
+        else:
+            locations_data[location] = [1, texts_num, texts_len]
+
+    locations_data_list = [(location, data[0], data[1], data[2]) for location, data in locations_data.items()]
+    locations_data_list.sort(key=lambda x: x[1])
+
+    print('Total authors num: %d' % total_authors_num)
+    print('Total_texts_num: %d' % total_texts_num)
+    print('Average texts len: %f' % (total_texts_len / total_texts_num))
+    print()
+
+    print('Location: Authors_num, texts_num, avg_texts_len')
+    for location, authors_num, texts_num, texts_len in locations_data_list:
+        print('%s: %d, %d, %f' % (location, authors_num, texts_num, texts_len / texts_num))
+
+def general_stat_no_locs_corpus(class_corp):
+
+    total_authors_num = len(class_corp)
+    total_texts_num = 0
+    total_texts_len = 0
+
+    text_len_border = [20, 300, 500, 1000, 3000, 5000]
+    author_num_for_border = {}
+    for text_len in text_len_border:
+        author_num_for_border[text_len] = 0
+
+    for author, data in class_corp.items():
+
+        text_len = data[lh.TextsLenKey]
+        total_texts_len += text_len
+
+        total_texts_num += len(data[lh.PositiveTextsKey]) + data[lh.NegativeTextsNumKey]
+
+        for text_len_border, value in author_num_for_border.items():
+            if text_len > text_len_border:
+                author_num_for_border[text_len_border] = value + 1
+
+    print('General LJ corpus stat')
+    print()
+    print('Total authors num: %d' % total_authors_num)
+    print('Total_texts_num: %d' % total_texts_num)
+    print('Average texts len: %f' % (total_texts_len / total_texts_num))
+    print()
+    for text_len_border, authors_num in author_num_for_border.items():
+        print('Border: %d, authors: %d' % (text_len_border, authors_num))
 
 def main(argv):
     json_filename = argv[0]
-    regions_filename = argv[1]
+    locations_filename = argv[1]
 
     class_corp = {}
     with open(json_filename) as json_file:
         class_corp = json.load(json_file)
 
-    # regions_for_country(class_corp, 'Republic of Kazakhstan')
-    regions_for_country(class_corp, lh.RussiaName)
-    # general_stat(class_corp)
-
+    # general_stat_for_locs(class_corp, locations_filename, min_texts_len=ch.MinTextLen)
+    # regions_for_country(class_corp, 'Ukraine')
+    # regions_for_country(class_corp, lh.RussiaName)
+    general_stat_no_locs_corpus(class_corp)
 
 
 if __name__ == "__main__":

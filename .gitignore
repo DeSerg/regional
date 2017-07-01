@@ -1,13 +1,13 @@
 */Icon
-data/standart_locations/postgre/*
-data/standart_locations/out/*
-data/standart_locations/database/*
+data/standart_locations/postgre
+data/standart_locations/out
+data/standart_locations/database
 .*
-data/standart_locations/corpus/*
-data/standart_locations/geonames_data/*
-classification_depr/*
+data/standart_locations/corpus
+data/standart_locations/geonames_data
+classification_depr
 data/words_small.jsons
 __pycache__
-data/classification/db_lj_corpus.json
+data/classification/db_lj_corpus**
 
 !.gitignore
