@@ -15,25 +15,26 @@ def cross_classify():
     author_nums = [100, 500]
     feature_weightings = ['log_odds', 'IG', 'ambiguity', 'none']  # + 'weight'
     features_to_select_arr = [100, 200]
-    min_texts_len = [300, 1000, 3000]
+    min_texts_lengths = [300, 1000, 3000]
     classifiers = ['NB', 'logistic', 'SVM'] # + 'sklearn_NB'
 
     # other parameters
     dict_filename = '../data/dictionary_29_05_2017.xlsx'
     train_json = '../data/classification/popov_lj_for_classify_rc.json'
 
-    for region_filename in region_filenames:
-        for classifier in classifiers:
-            for feature_weighting in feature_weightings:
-                for type in types:
-                    for author_num in author_nums:
-                        for features_to_select in features_to_select_arr:
-                            rclassify.run_parsed(
-                                region_filename, dict_filename, train_json,
-                                type, author_num,
-                                feature_weighting, features_to_select,
-                                min_texts_len, classifier)
-                            print('\n\n\n')
+    for min_texts_len in min_texts_lengths:
+        for region_filename in region_filenames:
+            for classifier in classifiers:
+                for feature_weighting in feature_weightings:
+                    for type in types:
+                        for author_num in author_nums:
+                            for features_to_select in features_to_select_arr:
+                                rclassify.run_parsed(
+                                    region_filename, dict_filename, train_json,
+                                    type, author_num,
+                                    feature_weighting, features_to_select,
+                                    min_texts_len, classifier)
+                                print('\n\n\n')
 
 
 def cross_classify_old():

@@ -660,6 +660,7 @@ def run_parsed(regions_filename, dict_filename, train_json,
     counts = np.mean(np.asarray(counts), axis=0)
     scores = np.mean(np.asarray(scores), axis=0)
 
+    print('min texts length  : ' + min_texts_len)
     print('regions           : ' + regions_filename)
     print('classificator     : ' + classifier)
     print('feature weighting : ' + feature_weighting)
