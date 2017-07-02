@@ -14,8 +14,8 @@ def cross_classify():
     ]
     author_nums = [100, 500]
     feature_weightings = ['log_odds', 'IG', 'ambiguity', 'none']  # + 'weight'
-    features_to_select_arr = [100, 200]
-    min_texts_lengths = [300, 1000, 3000]
+    features_to_select_arr = [100, 200, 500]
+    min_texts_lengths = [20, 300, 1000, 3000]
     classifiers = ['NB', 'logistic', 'SVM'] # + 'sklearn_NB'
 
     # other parameters
