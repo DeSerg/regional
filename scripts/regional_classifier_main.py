@@ -7,15 +7,15 @@ def cross_classify():
     types = ['multivariate', 'log_multinomial'] # + 'multinomial'
     region_filenames = [
         '../data/classification/db_top_locs_50.txt',
-        # '../data/classification/db_locs_main.txt',
+        '../data/classification/db_locs_main.txt',
         # '../data/classification/db_locs_main_exp.txt'
         # '../data/classification/db_top_locs_10.txt',
         # '../data/classification/db_top_locs_20.txt',
     ]
     author_nums = [100, 500]
-    feature_weightings = ['IG', 'ambiguity', 'none']  # + 'weight' 'log_odds'
+    feature_weightings = ['log_odds', 'IG', 'ambiguity', 'none']  # + 'weight' ''
     features_to_select_arr = [100, 200, 500]
-    min_texts_lengths = [1000, 3000] # 20, 300,
+    min_texts_lengths = [5000, 3000, 1000] # 20, 300,
     classifiers = ['NB', 'logistic', 'SVM'] # + 'sklearn_NB'
 
     # other parameters
