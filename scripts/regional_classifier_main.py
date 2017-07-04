@@ -7,20 +7,20 @@ def cross_classify():
     types = ['multivariate', 'log_multinomial'] # + 'multinomial'
     region_filenames = [
         '../data/classification/db_top_locs_50.txt',
-        '../data/classification/db_locs_main.txt',
-        '../data/classification/db_locs_main_exp.txt'
+        # '../data/classification/db_locs_main.txt',
+        # '../data/classification/db_locs_main_exp.txt'
         # '../data/classification/db_top_locs_10.txt',
         # '../data/classification/db_top_locs_20.txt',
     ]
     author_nums = [100, 500]
-    feature_weightings = ['log_odds', 'IG', 'ambiguity', 'none']  # + 'weight'
+    feature_weightings = ['IG', 'ambiguity', 'none']  # + 'weight' 'log_odds'
     features_to_select_arr = [100, 200, 500]
-    min_texts_lengths = [20, 300, 1000, 3000]
+    min_texts_lengths = [1000, 3000] # 20, 300,
     classifiers = ['NB', 'logistic', 'SVM'] # + 'sklearn_NB'
 
     # other parameters
     dict_filename = '../data/dictionary_29_05_2017.xlsx'
-    train_json = '../data/classification/popov_lj_for_classify_rc.json'
+    train_json = '../data/classification/db_lj_corpus.json'
 
     for min_texts_len in min_texts_lengths:
         for region_filename in region_filenames:
@@ -29,7 +29,7 @@ def cross_classify():
                     for type in types:
                         for author_num in author_nums:
                             for features_to_select in features_to_select_arr:
-                                rclassify.run_parsed(
+                                rclassify.run_parsed_ex(
                                     region_filename, dict_filename, train_json,
                                     type, author_num,
                                     feature_weighting, features_to_select,
