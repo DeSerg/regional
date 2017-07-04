@@ -63,7 +63,7 @@ def load_locations_map(locations_map_filename):
     return loc_map
 
 
-MaxRegionsDist = 5
+MaxRegionsDist = 7
 
 def load_regions_claster_map(regions_claster_filename):
 
