@@ -1,4 +1,6 @@
 ﻿import sys
+import numpy as np
+
 import regional_classifier.regional_classifier_prepare as rprepare
 import regional_classifier.regional_classifier_classify as rclassify
 
@@ -14,7 +16,7 @@ def cross_classify():
     ]
     author_nums = [100, 500]
     feature_weightings = ['log_odds', 'IG', 'ambiguity', 'none']  # + 'weight' ''
-    features_to_select_arr = [100, 200, 500]
+    features_to_select_arr = [100, 200] # 500
     min_texts_lengths = [5000, 3000, 1000] # 20, 300,
     classifiers = ['NB', 'logistic', 'SVM'] # + 'sklearn_NB'
 
@@ -35,6 +37,7 @@ def cross_classify():
                                     feature_weighting, features_to_select,
                                     min_texts_len, classifier)
                                 print('\n\n\n')
+
 
 
 def cross_classify_old():

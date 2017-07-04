@@ -62,9 +62,6 @@ def load_locations_map(locations_map_filename):
         loc_map = json.load(loc_map_f)
     return loc_map
 
-
-MaxRegionsDist = 7
-
 def load_regions_claster_map(regions_claster_filename):
 
     claster_map = {}

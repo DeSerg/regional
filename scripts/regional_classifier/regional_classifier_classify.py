@@ -23,6 +23,10 @@ sys.path.insert(0, '..')
 additional_loc_filename = '../data/additional_mapping.csv'
 regions_claster_filename='../data/classification/region_clasters.txt'
 
+MinThreshold = 0.3
+MaxRegionsDist = 7
+MaxRootDist = 3
+
 import regional_dict.regional_dict_helper as rdh
 import regional_dict.regional_json_statistics as rjs
 import location_utils.location_helper as lh
@@ -585,18 +589,54 @@ class PercentageCalculator:
         if found_path1 and found_path2:
             return max(len(path1), len(path2))
         else:
-            return lh.MaxRegionsDist
+            return MaxRegionsDist
 
     def regions_distance(self, region1, region2):
         if region1 == region2:
             return 0
 
         if not region1 in self.region_clasters or not region2 in self.region_clasters:
-            return lh.MaxRegionsDist
+            return MaxRegionsDist
 
         claster1 = self.region_clasters[region1]
         claster2 = self.region_clasters[region2]
         return self.claster_distance(claster1, claster2)
+
+    def same_claster(self, regions_pred, region_test):
+
+        if len(regions_pred) == 0:
+            return False
+
+        for region in regions_pred:
+            if not region in self.region_clasters:
+                return False
+
+        if not region_test in self.region_clasters:
+            return False
+
+        clasters_pred = [self.region_clasters[region] for region in regions_pred]
+        claster_test = self.region_clasters[region_test]
+
+        lca_key = clasters_pred[0]
+
+        for claster_pred in clasters_pred[1:]:
+            lca_key = lca.findLCA(self.regional_hierarchy_root, lca_key, claster_pred)
+
+        lca_node = lca.findNode(self.regional_hierarchy_root, lca_key)
+
+        test_path = []
+        if not lca.findPath(lca_node, test_path, claster_test) or len(test_path) > MaxRootDist:
+            return False
+
+        for claster_pred in clasters_pred:
+            path = []
+            if not lca.findPath(lca_node, path, claster_pred) or len(path) > MaxRootDist:
+                return False
+
+        return True
+
+
+
 
 
     def fit(self, test, pred, probs, thresholds):
@@ -659,17 +699,6 @@ class PercentageCalculator:
         order = order[::-1]
         test, pred = test.take(order), pred.take(order)
 
-        border = 40
-        # rev_sorted_probs = sorted_probs[::-1]
-        # for test_lab, pred_lab, prob_val in zip(test, pred, rev_sorted_probs):
-        #     if test_lab != pred_lab:
-        #         print(test_lab, pred_lab, prob_val)
-
-        # print(test[:border])
-        # print(pred[:border])
-        # print(sorted_probs[:n - border:-1])
-
-
         threshold_positions = [n - t for t in threshold_positions]
         if threshold_positions[-1] != n:
             threshold_positions.append(n)
@@ -703,6 +732,41 @@ class PercentageCalculator:
             self.scores[i] = dist_map_score
 
         return self
+
+    # test.shape = (n, 3)
+    def fit_mult(self, test, pred, probs, thresholds):
+
+        thresholds_arrs = [[] for i in range(len(thresholds))]
+
+        for threshold_ind, threshold in enumerate(thresholds):
+            for pred_vals, prob_vals, test_val in zip(pred, probs, test):
+                prob_sum = 0
+                for i, prob_val in enumerate(prob_vals):
+                    if prob_val > threshold or prob_val < MinThreshold:
+                        break
+                    prob_sum += prob_val
+                    if prob_sum >= threshold:
+
+                        thresholds_arrs[threshold_ind].append((pred_vals[: i + 1], prob_vals[: i + 1], test_val))
+                        break
+
+        scores = [0.0] * len(thresholds)
+        counts = [len(thresholds_arr) / len(test) for thresholds_arr in thresholds_arrs]
+
+        for i, thresholds_arr in enumerate(thresholds_arrs):
+            if not thresholds_arr:
+                continue
+
+            same_claster_num = 0
+
+            for pred_vals, prob_vals, test_val in thresholds_arr:
+                if self.same_claster(pred_vals, test_val):
+                    same_claster_num += 1
+
+            scores[i] = same_claster_num / len(thresholds_arr)
+
+        return scores, counts
+
 
 
 def run(args):
@@ -827,11 +891,15 @@ def run_parsed_ex(regions_filename, dict_filename, train_json,
     indices = shuf_split.split(X, y)
     counts, scores = [0] * nfolds, [[]] * nfolds
 
+    mult_class_counts, mult_class_scores = [0] * nfolds, [0.0] * nfolds
+
     for j, (train, test) in enumerate(indices):
         X_train, X_test = X[train], X[test]
         y_train, y_test = y[train], y[test]
         curr_clf = copy.deepcopy(clf).fit(X_train, y_train, features_to_select)
         probs = curr_clf.predict_proba(X_test)
+
+        # find class with maximum probability for each text
         max_indices = np.argmax(probs, axis=1)
         y_pred = np.take(curr_clf.classes_, max_indices)
         max_probs = probs[np.arange(max_indices.shape[0]), max_indices]
@@ -841,12 +909,23 @@ def run_parsed_ex(regions_filename, dict_filename, train_json,
         # print(y_pred[:length])
         # print(max_probs[:length])
 
-
         calculator = PercentageCalculator(skm.precision_score, labels, region_clasters)
         prob_thresholds = [0.5, 0.75, 0.9]
         calculator.fit_ex(y_test, y_pred, max_probs, prob_thresholds)
         counts[j], scores[j], thresholds = \
             calculator.counts, calculator.scores, calculator.thresholds
+
+
+        # find several maximum classes for each text
+
+        max_indices = probs.argsort(axis=1)
+        max_indices = max_indices.take([-1, -2, -3], axis=1)
+        y_pred = np.take(curr_clf.classes_, max_indices)
+        max_probs = [ np.take(probs[i], max_indices[i]) for i in range(len(probs)) ]
+
+        mult_class_scores[j], mult_class_counts[j] = calculator.fit_mult(y_test, y_pred, max_probs, prob_thresholds)
+
+
 
     avg_score = [{} for i in range(len(thresholds))]
     for score in scores:
@@ -881,3 +960,67 @@ def run_parsed_ex(regions_filename, dict_filename, train_json,
         print("{0:<.1f} {1:<.2f}".format(
             100 * np.sum(count) / test.size, threshold), end=" ")
         print("")
+
+    mult_class_scores = np.mean(np.asarray(mult_class_scores), axis=0)
+    mult_class_counts = np.mean(np.asarray(mult_class_counts), axis=0)
+
+    print('score for multiple classes')
+    for mult_class_score, mult_class_count, threshold in zip(mult_class_scores, mult_class_counts, thresholds):
+        print("{0:<.1f} {1:<.1f} {2:<.2f}".format(
+            100 * nanmean(mult_class_score), 100 * mult_class_count, threshold), end=" ")
+        print('')
+
+
+
+    return counts, avg_score, thresholds
+
+
+def cross_classify_avg_score(regions_filename, dict_filename, train_json,
+               types, authors_numbers,
+               feature_weightings, features_to_select_arr,
+               min_texts_len=ch.MinTextLen, classifier ='NB',
+               algorithm = 'simple', mode = 'authors', nfolds = 10, local=True, new_corpus=True):
+
+    results = []
+
+    for feature_weighting in feature_weightings:
+        for type in types:
+            for author_num in authors_numbers:
+                for features_to_select in features_to_select_arr:
+                    results.append(run_parsed_ex(
+                        regions_filename, dict_filename, train_json,
+                        type, author_num,
+                        feature_weighting, features_to_select,
+                        min_texts_len, classifier))
+                    print('\n\n\n')
+
+    tresholds = results[0][2]
+    tresholds_len = len(tresholds)
+    counts = [[]] * tresholds_len
+    scores = [{}] * tresholds_len
+
+    for count, score, treshold in results:
+        for ind, count_loc in enumerate(count):
+            counts[ind] += count_loc
+        for ind, sc in enumerate(score):
+            for dist, num in sc.items():
+                if dist in scores[ind]:
+                    scores[ind][dist] += num
+                else:
+                    scores[ind][dist] = num
+
+    for avg_dist_map in scores:
+        for dist, num in avg_dist_map.items():
+            avg_dist_map[dist] = num / len(results)
+    for ind, avg_count in enumerate(counts):
+        counts[ind] /= len(results)
+
+    for count, score, threshold in zip(counts, scores, tresholds):
+        score_str = []
+        for dist in sorted(score.keys()):
+            score_str.append(str(dist) + ':' + '{0:<.1f}'.format(100 * score[dist]))
+        print('; '.join(score_str))
+        print("{0:<.1f} {1:<.2f}".format(
+            100 * np.sum(count) / test.size, threshold), end=" ")
+        print("")
+
