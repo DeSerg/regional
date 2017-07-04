@@ -169,10 +169,10 @@ def regions_rus_stat(json_filename):
         print('%s: %d' % (region, authors))
 
 
-def countries_num(class_corp):
+def countries_only_stat(class_corp):
     countries = {}
     for author, data in class_corp.items():
-        if not lh.RegionKey in data and lh.CountryKey in data:
+        if not lh.CityKey in data and not lh.RegionKey in data and lh.CountryKey in data:
             country = data[lh.CountryKey]
             if country in countries:
                 countries[country] += 1
@@ -216,18 +216,19 @@ def regions_for_country(class_corp, country_targ):
     reg_authors_nums = []
 
     for region_id, (region, authors_num, reg_authors_num) in enumerate(regions_list, 1):
-        print('%s: %d, %d' % (region, authors_num, reg_authors_num))
+        # print('%s: %d, %d' % (region, authors_num, reg_authors_num))
+        print('%s:' % (region))
         region_ids.append(region_id)
         authors_nums.append(authors_num)
         reg_authors_nums.append(reg_authors_num)
 
-    print('Total authors num: %d' % sum(authors_nums))
-    print('Total authors with regional texts num: %d' % sum(reg_authors_nums))
+    # print('Total authors num: %d' % sum(authors_nums))
+    # print('Total authors with regional texts num: %d' % sum(reg_authors_nums))
 
-    start = 1
-    plt.plot(region_ids[start:], authors_nums[start:], 'bo', region_ids[start:], reg_authors_nums[start:], 'r^')
+    #start = 1
+    #plt.plot(region_ids[start:], authors_nums[start:], 'bo', region_ids[start:], reg_authors_nums[start:], 'r^')
     # plt.plot(region_ids[start:], reg_authors_nums[start:], 'g^')
-    plt.show()
+    #plt.show()
 
 
 def general_stat(class_corp):
@@ -374,10 +375,11 @@ def main(argv):
     with open(json_filename) as json_file:
         class_corp = json.load(json_file)
 
+    # countries_only_stat(class_corp)
     # general_stat_for_locs(class_corp, locations_filename, min_texts_len=ch.MinTextLen)
-    # regions_for_country(class_corp, 'Ukraine')
-    # regions_for_country(class_corp, lh.RussiaName)
-    general_stat_no_locs_corpus(class_corp)
+    regions_for_country(class_corp, 'Ukraine')
+    regions_for_country(class_corp, lh.RussiaName)
+    # general_stat_no_locs_corpus(class_corp)
 
 
 if __name__ == "__main__":

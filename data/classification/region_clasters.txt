@@ -1,0 +1,110 @@
+Misto Kyyiv:1
+Kharkivs’ka Oblast’:1
+Odes’ka Oblast’:1
+Dnipropetrovska Oblast':1
+Donets’ka Oblast’:1
+L’vivs’ka Oblast’:2
+Republic of Crimea:1
+Zaporiz’ka Oblast’:1
+Gorod Sevastopol:1
+Luhans’ka Oblast’:1
+Mykolayivs’ka Oblast’:1
+Poltavs’ka Oblast’:1
+Kyiv Oblast:1
+Vinnyts’ka Oblast’:1
+Cherkas’ka Oblast’:1
+Khersons’ka Oblast’:1
+Chernihivs’ka Oblast’:1
+Ternopil’s’ka Oblast’:1
+Ivano-Frankivs’ka Oblast’:2
+Sums’ka Oblast’:1
+Khmel’nyts’ka Oblast’:1
+Volyns’ka Oblast’:1
+Zakarpattia Oblast:2
+Zhytomyrs’ka Oblast’:2
+Rivnens’ka Oblast’:1
+Kirovohrads’ka Oblast’:1
+Chernivets’ka Oblast’:2
+Moscow Oblast:7
+Leningradskaya Oblast’:7
+Sverdlovskaya Oblast’:10
+Novosibirskaya Oblast’:11
+Samarskaya Oblast’:7
+Rostovskaya Oblast’:6
+Nizhegorodskaya Oblast’:7
+Krasnodarskiy Kray:6
+Moskva:7
+Chelyabinskaya Oblast’:10
+Tatarstan:7
+Bashkortostan:7
+Perm Krai:10
+Krasnoyarskiy Kray:11
+Primorskiy Kray:3
+Voronezhskaya Oblast’:7
+Irkutskaya Oblast’:12
+Volgogradskaya Oblast’:7
+Omskaya Oblast’:11
+Saratovskaya Oblast’:7
+Kaliningradskaya Oblast’:7
+Tomskaya Oblast’:11
+Tyumenskaya Oblast’:10
+Khabarovskiy Kray:3
+Altayskiy Kray:11
+Kemerovskaya Oblast’:11
+Yaroslavskaya Oblast’:7
+Tul’skaya Oblast’:7
+Ulyanovsk Oblast:7
+Astrakhanskaya Oblast’:7
+Udmurtskaya Respublika:10
+Stavropol’skiy Kray:7
+Tverskaya Oblast’:7
+Kirovskaya Oblast’:10
+Orenburgskaya Oblast’:7
+Murmanskaya Oblast’:7
+Belgorodskaya Oblast’:7
+Vologodskaya Oblast’:7
+Arkhangel’skaya Oblast’:7
+Ryazanskaya Oblast’:7
+Kaluzhskaya Oblast’:7
+Vladimirskaya Oblast’:7
+Khanty-Mansiyskiy Avtonomnyy Okrug-Yugra:7
+Penzenskaya Oblast’:7
+Novgorodskaya Oblast’:7
+Chuvashskaya Respublika:7
+Ivanovskaya Oblast’:7
+Lipetskaya Oblast’:7
+Bryanskaya Oblast’:7
+Smolenskaya Oblast’:7
+Komi:7
+Respublika Kareliya:7
+Orlovskaya Oblast’:7
+Dagestan:7
+Kurskaya Oblast’:7
+Tambovskaya Oblast’:7
+Pskovskaya Oblast’:7
+Respublika Mariy-El:7
+Sakhalinskaya Oblast’:3
+Kostromskaya Oblast’:7
+Kurganskaya Oblast’:10
+Respublika Mordoviya:7
+Amurskaya Oblast’:3
+North Ossetia:7
+Kamtchatski Kray:3
+Yamalo-Nenetskiy Avtonomnyy Okrug:11
+Respublika Khakasiya:4
+Respublika Sakha (Yakutiya):3
+Respublika Buryatiya:12
+Chechenskaya Respublika:7
+Sankt-Peterburg:7
+Magadanskaya Oblast’:3
+Kabardino-Balkarskaya Respublika:7
+Respublika Ingushetiya:7
+Chukotskiy Avtonomnyy Okrug:3
+Respublika Altay:11
+Respublika Adygeya:6
+Yevreyskaya Avtonomnaya Oblast’:3
+Karachayevo-Cherkesiya:6
+Nenetskiy Avtonomnyy Okrug:7
+Respublika Tyva:11
+Zabaykal’skiy Kray:5
+Kalmykiya:6

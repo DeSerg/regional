@@ -11,6 +11,7 @@ PositiveTextsKey = 'positive texts'
 
 TextsLenKey = 'texts length'
 
+MoscowName = 'Moscow'
 RussiaName = 'Russian Federation'
 
 corpus_loc_re = re.compile('attr_\d+_Location="(.*?)"')
@@ -60,3 +61,21 @@ def load_locations_map(locations_map_filename):
     with open(locations_map_filename) as loc_map_f:
         loc_map = json.load(loc_map_f)
     return loc_map
+
+
+MaxRegionsDist = 5
+
+def load_regions_claster_map(regions_claster_filename):
+
+    claster_map = {}
+
+    with open(regions_claster_filename) as clast_map_f:
+        for line in clast_map_f:
+            line_split = line.split(':')
+            if len(line_split) != 2:
+                continue
+            region = line_split[0]
+            claster = int(line_split[1])
+            claster_map[region] = claster
+
+    return claster_map

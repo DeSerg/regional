@@ -21,10 +21,12 @@ import sklearn.svm as sksvm
 # from sklearn.base import BaseEstimator, ClassifierMixin
 sys.path.insert(0, '..')
 additional_loc_filename = '../data/additional_mapping.csv'
+regions_claster_filename='../data/classification/region_clasters.txt'
 
 import regional_dict.regional_dict_helper as rdh
 import regional_dict.regional_json_statistics as rjs
 import location_utils.location_helper as lh
+import location_utils.lca as lca
 import corpus.corpus_helper as ch
 from utility import routines as routines
 
@@ -123,11 +125,19 @@ def prepare_data_db(classify_mode, process_mode, dict_filename,
     # regions_keys = lemmatizer.regions_list()
     # countries_keys = lemmatizer.countries_list()
 
+
     region_map, country_map = _read_locs_db(regions_filename)
     REGIONS_NUMBER = len(region_map)
     COUNTRIES_NUMBER = len(country_map)
     word_codes, lemma_codes = _make_regional_words_codes(lemmatizer.word_forms())
     nfeat = len(lemma_codes)
+
+    region_name_clasters = lh.load_regions_claster_map(regions_claster_filename)
+    region_code_clasters = {}
+    for region, code in region_map.items():
+        if region in region_name_clasters:
+            region_code_clasters[code] = region_name_clasters[region]
+
 
     json_data = json.load(open(data_filename, "r"))
     if classify_mode == 'texts':
@@ -192,7 +202,8 @@ def prepare_data_db(classify_mode, process_mode, dict_filename,
                 nrows += 1
         data = scsp.csr_matrix((values, (rows, cols)), shape=(nrows, nfeat), dtype=int)
     return {'data': data, 'weights': weights, 'y': y, 'ids': ids,
-            'region map': region_map, 'lemma codes': lemma_codes}
+            'region map': region_map, 'lemma codes': lemma_codes,
+            'region_clasters': region_code_clasters}
 
 
 def _top_authors(rn_num, cn_num, json_data, rn_map, cn_map, authors_number, min_texts_len):
@@ -221,6 +232,11 @@ def _top_authors(rn_num, cn_num, json_data, rn_map, cn_map, authors_number, min_
     return list(set((x[0] for x in chain.from_iterable(author_indexes_by_loc))))
 
 def _extract_loc(data, region_map, country_map):
+
+    # exclude Moscow
+    if lh.CityKey in data and data[lh.CityKey] == lh.MoscowName:
+        return '', None, ''
+
     region = ''
     region_code = None
     country = ''
@@ -547,10 +563,41 @@ def _calculate_first_positions(a, labels):
     return [positions.get(x, None) for x in labels]
 
 class PercentageCalculator:
-    def __init__(self, score_func, labels):
+    def __init__(self, score_func, labels, region_clasters):
         self.score_func = score_func
         self.labels = labels
         self.label_codes ={label : i for i, label in enumerate(self.labels)}
+        self.region_clasters = region_clasters
+        self.regional_hierarchy_root = lca.regional_hierarchy()
+
+    def claster_distance(self, claster1, claster2):
+        if claster1 == claster2:
+            return 1
+        lca_key = lca.findLCA(self.regional_hierarchy_root, claster1, claster2)
+        lca_node = lca.findNode(self.regional_hierarchy_root, lca_key)
+
+        path1 = []
+        found_path1 = lca.findPath(lca_node, path1, claster1)
+
+        path2 = []
+        found_path2 = lca.findPath(lca_node, path2, claster2)
+
+        if found_path1 and found_path2:
+            return max(len(path1), len(path2))
+        else:
+            return lh.MaxRegionsDist
+
+    def regions_distance(self, region1, region2):
+        if region1 == region2:
+            return 0
+
+        if not region1 in self.region_clasters or not region2 in self.region_clasters:
+            return lh.MaxRegionsDist
+
+        claster1 = self.region_clasters[region1]
+        claster2 = self.region_clasters[region2]
+        return self.claster_distance(claster1, claster2)
+
 
     def fit(self, test, pred, probs, thresholds):
         test, pred, probs = np.asarray(test), np.asarray(pred), np.asarray(probs)
@@ -564,10 +611,24 @@ class PercentageCalculator:
                                for threshold in self.thresholds]
         order = order[::-1]
         test, pred = test.take(order), pred.take(order)
+
+        border = 40
+        rev_sorted_probs = sorted_probs[::-1]
+        for test_lab, pred_lab, prob_val in zip(test, pred, rev_sorted_probs):
+            if test_lab != pred_lab:
+                print(test_lab, pred_lab, prob_val)
+
+                # print(test[:border])
+                # print(pred[:border])
+                # print(sorted_probs[:n - border:-1])
+
         threshold_positions = [n - t for t in threshold_positions]
         if threshold_positions[-1] != n:
             threshold_positions.append(n)
             self.thresholds.append(sorted_probs[0])
+
+
+
         self.counts = np.zeros(shape=(len(threshold_positions), len(self.labels)),
                                dtype=int)
         self.scores = np.zeros(shape=(len(threshold_positions), len(self.labels)),
@@ -584,6 +645,65 @@ class PercentageCalculator:
                                              labels=self.labels, average=None)
             self.scores[i] = np.where(self.counts[i] > 0, self.scores[i], np.nan)
         return self
+
+    def fit_ex(self, test, pred, probs, thresholds):
+        test, pred, probs = np.asarray(test), np.asarray(pred), np.asarray(probs)
+        n = test.shape[0]
+        if test.shape[0] != n or test.shape[0] != n:
+            raise ValueError("Test, pred and probs should be of equal length")
+        self.thresholds = sorted(thresholds, reverse=True)
+        order = np.argsort(probs)
+        sorted_probs = np.take(probs, order)
+        threshold_positions = [bisect.bisect_left(sorted_probs, threshold)
+                               for threshold in self.thresholds]
+        order = order[::-1]
+        test, pred = test.take(order), pred.take(order)
+
+        border = 40
+        # rev_sorted_probs = sorted_probs[::-1]
+        # for test_lab, pred_lab, prob_val in zip(test, pred, rev_sorted_probs):
+        #     if test_lab != pred_lab:
+        #         print(test_lab, pred_lab, prob_val)
+
+        # print(test[:border])
+        # print(pred[:border])
+        # print(sorted_probs[:n - border:-1])
+
+
+        threshold_positions = [n - t for t in threshold_positions]
+        if threshold_positions[-1] != n:
+            threshold_positions.append(n)
+            self.thresholds.append(sorted_probs[0])
+        self.counts = np.zeros(shape=(len(threshold_positions), len(self.labels)),
+                               dtype=int)
+        self.scores = [{} for i in range(len(threshold_positions))]
+        threshold_index = 0
+        for i, (pos, label) in enumerate(zip(order, test)):
+            while i == threshold_positions[threshold_index]:
+                threshold_index += 1
+            label_code = self.label_codes[label]
+            self.counts[threshold_index][label_code] += 1
+        self.counts = np.cumsum(self.counts, axis=0)
+        for i, t in enumerate(threshold_positions):
+            test_labels = test[:t]
+            pred_labels = pred[:t]
+            dist_map = {}
+
+            for test_label, pred_label in zip(test_labels, pred_labels):
+                dist_val = self.regions_distance(test_label, pred_label)
+                if dist_val in dist_map:
+                    dist_map[dist_val] += 1
+                else:
+                    dist_map[dist_val] = 1
+
+            dist_map_score = {}
+            for dist_val, num in dist_map.items():
+                dist_map_score[dist_val] = num / t
+
+            self.scores[i] = dist_map_score
+
+        return self
+
 
 def run(args):
     try:
@@ -636,6 +756,9 @@ def run_parsed(regions_filename, dict_filename, train_json,
 
     X, y, authors = data['data'], data['y'], data['ids']
     X, y = np.array(X, dtype='object'), np.array(y, dtype='int32')
+
+    region_clasters = data['region_clasters']
+
     labels = sorted(set(y))
     n_classes = len(labels)
     shuf_split = skcv.StratifiedShuffleSplit(n_splits=nfolds, test_size=0.2, random_state=217)
@@ -651,7 +774,13 @@ def run_parsed(regions_filename, dict_filename, train_json,
         y_pred = np.take(curr_clf.classes_, max_indices)
         max_probs = probs[np.arange(max_indices.shape[0]), max_indices]
 
-        calculator = PercentageCalculator(skm.precision_score, labels)
+        length = 10
+        print(y_test[:length])
+        print(y_pred[:length])
+        print(max_probs[:length])
+
+
+        calculator = PercentageCalculator(skm.precision_score, labels, region_clasters)
         prob_thresholds = [0.5, 0.75, 0.9]
         calculator.fit(y_test, y_pred, max_probs, prob_thresholds)
         counts[j], scores[j], thresholds = \
@@ -670,4 +799,85 @@ def run_parsed(regions_filename, dict_filename, train_json,
     for count, score, threshold in zip(counts, scores, thresholds):
         print("{0:<.1f} {1:<.1f} {2:<.2f}".format(
             100 * nanmean(score), 100 * np.sum(count) / test.size, threshold), end=" ")
+        print("")
+
+
+def run_parsed_ex(regions_filename, dict_filename, train_json,
+               type = 'multivariate', authors_number = 100,
+               feature_weighting ='log_odds', features_to_select = 100,
+               min_texts_len=ch.MinTextLen, classifier ='NB',
+               algorithm = 'simple', mode = 'authors', nfolds = 10, local=True, new_corpus=True): # !!!!!!!!!! nfolds = 10
+
+    clf = RegionalBayesClassifier(mode=mode, classifier=classifier, algorithm=algorithm, type=type,
+                                  alpha=0.1, feature_weighting=feature_weighting, local=local)
+
+    if new_corpus:
+        data = prepare_data_db(mode, 'train', dict_filename, regions_filename, authors_number, min_texts_len, train_json)
+    else:
+        data = prepare_data(mode, 'train', dict_filename, regions_filename, authors_number, train_json)
+
+    X, y, authors = data['data'], data['y'], data['ids']
+    X, y = np.array(X, dtype='object'), np.array(y, dtype='int32')
+
+    region_clasters = data['region_clasters']
+
+    labels = sorted(set(y))
+    n_classes = len(labels)
+    shuf_split = skcv.StratifiedShuffleSplit(n_splits=nfolds, test_size=0.2, random_state=217)
+    indices = shuf_split.split(X, y)
+    counts, scores = [0] * nfolds, [[]] * nfolds
+
+    for j, (train, test) in enumerate(indices):
+        X_train, X_test = X[train], X[test]
+        y_train, y_test = y[train], y[test]
+        curr_clf = copy.deepcopy(clf).fit(X_train, y_train, features_to_select)
+        probs = curr_clf.predict_proba(X_test)
+        max_indices = np.argmax(probs, axis=1)
+        y_pred = np.take(curr_clf.classes_, max_indices)
+        max_probs = probs[np.arange(max_indices.shape[0]), max_indices]
+
+        # length = 10
+        # print(y_test[:length])
+        # print(y_pred[:length])
+        # print(max_probs[:length])
+
+
+        calculator = PercentageCalculator(skm.precision_score, labels, region_clasters)
+        prob_thresholds = [0.5, 0.75, 0.9]
+        calculator.fit_ex(y_test, y_pred, max_probs, prob_thresholds)
+        counts[j], scores[j], thresholds = \
+            calculator.counts, calculator.scores, calculator.thresholds
+
+    avg_score = [{} for i in range(len(thresholds))]
+    for score in scores:
+        for ind, sc in enumerate(score):
+            for dist, num in sc.items():
+                if dist in avg_score[ind]:
+                    avg_score[ind][dist] += num
+                else:
+                    avg_score[ind][dist] = num
+
+    for avg_dist_map in avg_score:
+        for dist, num in avg_dist_map.items():
+            avg_dist_map[dist] = num / len(scores)
+
+
+    test_size = np.mean([len(test) for train, test in indices])
+    counts = np.mean(np.asarray(counts), axis=0)
+#    scores = np.mean(np.asarray(scores), axis=0)
+
+    print('min texts length  : ' + str(min_texts_len))
+    print('regions           : ' + regions_filename)
+    print('classificator     : ' + classifier)
+    print('feature weighting : ' + feature_weighting)
+    print('model             : ' + type)
+    print('authors number    : ' + str(authors_number))
+    print('features to select: ' + str(features_to_select))
+    for count, score, threshold in zip(counts, avg_score, thresholds):
+        score_str = []
+        for dist in sorted(score.keys()):
+            score_str.append(str(dist) + ':' + '{0:<.1f}'.format(100 * score[dist]))
+        print('; '.join(score_str))
+        print("{0:<.1f} {1:<.2f}".format(
+            100 * np.sum(count) / test.size, threshold), end=" ")
         print("")

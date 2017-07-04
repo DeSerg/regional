@@ -2046,7 +2046,7 @@ model             : multivariate
 authors number    : 100
 features to select: 100
 nan 0.0 0.90 
-nan 0.0 0.75 
+nan 0.0 0.75 x
 87.0 1.1 0.50 
 22.4 100.0 0.02 
 
