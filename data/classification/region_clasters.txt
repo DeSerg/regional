@@ -91,7 +91,7 @@ Amurskaya Oblast’:3
 North Ossetia:7
 Kamtchatski Kray:3
 Yamalo-Nenetskiy Avtonomnyy Okrug:11
-Respublika Khakasiya:4
+Respublika Khakasiya:11
 Respublika Sakha (Yakutiya):3
 Respublika Buryatiya:12
 Chechenskaya Respublika:7
